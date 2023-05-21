@@ -1,0 +1,41 @@
+
+.App{
+  background-color: rgb(5, 17, 33);
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+.logo-home{
+  max-width: 350px;
+  margin: 0 20px;
+  align-self: center;
+}
+.logo-inicio{
+  max-width: 300px;
+  max-height: fit-content;
+  object-fit: contain;
+  margin-left: 10px;
+  margin: 10px;
+}
+.home-btns{
+  align-self: center;
+}
+.home-btns button{
+  align-self: center;
+  width: 300px;
+  margin: 10px;
+}
+.publicar-cuento #asunto{
+  width: 350px;
+}
+.publicar-cuento #autor{
+  width: 350px;
+}
+.publicar-cuento #titulo{
+  width: 350px;
+}
+.publicar-cuento textarea{
+  width: 350px;
+  height: 450px;
+}
