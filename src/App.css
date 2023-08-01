@@ -91,8 +91,7 @@
   background-color: rgb(132, 200, 255);
 }
 .cuento-box{
-  min-width: 300px;
-  max-width: 450px;
+  width: 350px;
   align-self: center;
   background-color: #f5f7f9;
   color: rgb(6, 23, 48);
@@ -109,6 +108,7 @@
 .menu-cuentos{
   max-width: 500px;
   min-width: 350px;
+  margin-bottom: 5px;
 }
 .menu-cuentos div{
   width: 60px;
@@ -132,25 +132,24 @@
   border-radius: 25px;
   margin: 5px;
   padding: 10px;
-  min-width: 450px;
+  width: 350px;
   color: #4275a8;
 }
 .caja-cuento{
   border-radius: 25px;
-  max-width: 475px;
-  min-width: 350px;
+  width: 350px;
   text-align: justify;
   background-color: #e8e8e8;
   color: black;
   padding: 10px;
-  padding-top: 20px;
+  padding-top: 30px;
 }
 .caja-cerrar-cuento{
-  min-width: 470px;
+  width: 350px;
   height: 0px;
   z-index:1000;
 }
 .caja-cerrar-cuento button{
-  margin: 10px;
-  font-size: 20px;
+  margin: 8px;
+  font-size: 18px;
 }
