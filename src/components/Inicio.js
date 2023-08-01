@@ -12,19 +12,19 @@ const Inicio = () => {
     const navigate = useNavigate()
     const { user, login, loading, cuentos, resolveCuento, misCuentos, admins, noauth, misMensajes } = useApp()
     const [page, setPage] = useState("home")
-    const setPageHome = (e) =>{
+    const setPageHome = (e) => {
         e.preventDefault()
         setPage("home")
     }
-    const setPageCuentos = (e) =>{
+    const setPageCuentos = (e) => {
         e.preventDefault()
         setPage("cuentos")
     }
-    const setPageConfig = (e) =>{
+    const setPageConfig = (e) => {
         e.preventDefault()
         setPage("config")
     }
-    const Navigation = () =>{
+    const Navigation = () => {
         return (
             <div className="navigation-btns">
                 <div className="d-flex flex-row justify-content-center">
@@ -85,7 +85,7 @@ const Inicio = () => {
                     <button onClick={(e) => { e.preventDefault(); navigate("/publicar") }} className="btn btn-dark">Publicar Cuento</button>
                     <button onClick={(e) => { e.preventDefault(); navigate("/enviar") }} className="btn btn-dark">Enviar Mensaje</button>
                     {admins.includes(user.email) && <button onClick={(e) => { e.preventDefault(); navigate("/admin") }} className="btn btn-dark">Configuración</button>
-}
+                    }
                 </div>
             </div>
         )
@@ -116,11 +116,11 @@ const Inicio = () => {
                         <div className=" d-flex justify-content-center">
 
                             <button className="btn btn-primary  p-2 ps-4 pe-4 fs-5 m-2 fw-bold" onClick={login}>Login</button>
-                            
+
                         </div>
                         {noauth && <div className="alert alert-danger text-center" role="alert">
-  No estas autorizado para ingresar
-</div>}
+                            No estas autorizado para ingresar
+                        </div>}
                     </div>
 
                 </div>

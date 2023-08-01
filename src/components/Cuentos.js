@@ -68,28 +68,28 @@ const Cuentos = () => {
                 </div>
                 <div className="d-flex flex-row justify-content-center">
                     <div className="d-flex flex-row justify-content-center menu-cuentos">
-                        <div role="button" onClick={(e) =>{
+                        <div role="button" onClick={(e) => {
                             e.preventDefault();
                             setPages("all")
                         }} className={`${page === "all" && "nav-selected"}`}><img className={`menu-img`} src={libro1} alt=""></img></div>
-                        <div role="button" onClick={(e) =>{
+                        <div role="button" onClick={(e) => {
                             e.preventDefault();
                             setPages("user")
-                        }}  className={`${page === "user" && "nav-selected"}`}><img className="menu-img" src={usuario} alt=""></img></div>
-                        <div role="button" onClick={(e) =>{
+                        }} className={`${page === "user" && "nav-selected"}`}><img className="menu-img" src={usuario} alt=""></img></div>
+                        <div role="button" onClick={(e) => {
                             e.preventDefault();
                             setPages("autor")
-                        }}  className={`${page === "autor" && "nav-selected"}`}><img className="menu-img" src={lapiz} alt=""></img></div>
-                        <div role="button" onClick={(e) =>{
+                        }} className={`${page === "autor" && "nav-selected"}`}><img className="menu-img" src={lapiz} alt=""></img></div>
+                        <div role="button" onClick={(e) => {
                             e.preventDefault();
                             setPages("msg")
-                        }}  className={`${page === "msg" && "nav-selected"}`}><img className="menu-img" src={msg} alt=""></img></div>
-                        <div role="button" onClick={(e) =>{
+                        }} className={`${page === "msg" && "nav-selected"}`}><img className="menu-img" src={msg} alt=""></img></div>
+                        <div role="button" onClick={(e) => {
                             e.preventDefault();
                             let num = Math.floor(Math.random() * cuentos.length)
-                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true);
+                            resolveCuento(cuentos[num]); sessionStorage.setItem("location", true);
                             setPages("ramdom")
-                        }}  className={`${page === "ramdom" && "nav-selected"}`}><img className="menu-img" src={ramdom} alt=""></img></div>
+                        }} className={`${page === "ramdom" && "nav-selected"}`}><img className="menu-img" src={ramdom} alt=""></img></div>
                     </div>
                 </div>
 
@@ -127,18 +127,18 @@ const Cuentos = () => {
                         </div>
                     </div>
                 </div>}
-                            {
-                                page === "autor" && <Autores />
-                            }
-                            {
-                                page === "user" && <Usuarios />
-                            }
-                                                        {
-                                page === "msg" && <Mensajes />
-                            }
-                                                        {
-                                page === "ramdom" && <Cuento />
-                            }
+                {
+                    page === "autor" && <Autores />
+                }
+                {
+                    page === "user" && <Usuarios />
+                }
+                {
+                    page === "msg" && <Mensajes />
+                }
+                {
+                    page === "ramdom" && <Cuento />
+                }
 
 
             </div>
