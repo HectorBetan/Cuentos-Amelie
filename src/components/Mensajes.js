@@ -52,7 +52,7 @@ const Mensajes = () => {
                 
                 <h2 className="text-center">Mensajes</h2>
                 </div>
-                <label>Buscar</label><input onChange={changeBuscar}></input>
+                <label className="m-2">Buscar</label><input onChange={changeBuscar}></input>
                 <div className="text-start">
                         <div className="d-flex flex-column justify-content-center">
                         {!cargando && newMensajes.map((mensaje, i) => {
@@ -60,8 +60,9 @@ const Mensajes = () => {
                         return (
                             <div className="cuento-box" key={i}>
                                 <div className="">
+                                <h5 className="">De: {mensaje.user}</h5>
                                     <h5 className="">Asunto: {mensaje.asunto}</h5>
-                                    <h5 className="">Usuario: {mensaje.user}</h5>
+                                    
                                     <h6>Mensaje:</h6>
                                     <p>{mensaje.mensaje}</p>
                                 </div>
@@ -72,8 +73,8 @@ const Mensajes = () => {
                             return (
                                 <div className="cuento-box" key={i}>
                                     <div className="">
+                                    <h5 className="">De: {mensaje.user}</h5>
                                         <h5 className="">Asunto: {mensaje.asunto}</h5>
-                                        <h5 className="">Usuario: {mensaje.user}</h5>
                                         <h5 className="">Mensaje Privado</h5>
                                         <h6>Mensaje:</h6>
                                         <p>{mensaje.mensaje}</p>

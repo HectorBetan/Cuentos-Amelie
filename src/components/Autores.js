@@ -112,7 +112,7 @@ const Autores = () => {
                                                     <div className="">
                                                         <h5 className="">Titulo: {cuento.titulo}</h5>
                                                         <h5 className="">Autor: {cuento.autor}</h5>
-                                                        <h5 className="">Usuario: {cuento.user}</h5>
+                                                        <h5 className="">Publicado por: {cuento.user}</h5>
                                                         <button onClick={(e) => {
                                                             e.preventDefault();
                                                             resolveCuento(cuento);

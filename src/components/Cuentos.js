@@ -7,6 +7,7 @@ import usuario from "../assets/usuario.png";
 import lapiz from "../assets/lapiz.png";
 import msg from "../assets/msg.png";
 import ramdom from "../assets/ramdom.png";
+import azar from "../assets/azar.png";
 import Autores from "./Autores";
 import Usuarios from "./Usuarios";
 import Mensajes from "./Mensajes";
@@ -30,6 +31,15 @@ const Cuentos = () => {
     const setPages = (p) => {
         setPage(p)
     }
+    const resolveNewCuento = () =>{
+        console.log("azar")
+        setNewCuentos(null)
+        setCargando(true)
+        let num = Math.floor(Math.random() * cuentos.length)
+        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true);
+        setPages("ramdom")
+        setCargando(false)
+    }
     const changeBuscar = (e) => {
         e.preventDefault();
         setCargando(true);
@@ -43,7 +53,7 @@ const Cuentos = () => {
         setNewCuentos(filteredCuentos);
         setCargando(false);
     };
-    if (loading || !cuentos || !newCuentos) {
+    if (loading || !cuentos || !newCuentos || cargando) {
         return (
             <div className="text-center d-flex flex-column justify-content-center h-100"
                 style={{ alignSelf: "center" }}>
@@ -94,7 +104,7 @@ const Cuentos = () => {
                 </div>
 
                 {page === "all" && <div>
-                    <label>Buscar</label><input onChange={changeBuscar}></input>
+                    <label className="m-2">Buscar</label><input onChange={changeBuscar}></input>
                     <div className="text-start">
                         <div className="d-flex flex-column justify-content-center">
                             {!cargando && newCuentos.map((cuento, i) => {
@@ -103,7 +113,7 @@ const Cuentos = () => {
                                         <div className="">
                                             <div className="">Titulo: <span className="cuento-info">{cuento.titulo}</span></div>
                                             <div className="">Autor: <span className="cuento-info">{cuento.autor}</span></div>
-                                            <div className="">Usuario: <span className="cuento-info">{cuento.user}</span></div>
+                                            <div className="">Publicado por: <span className="cuento-info">{cuento.user}</span></div>
                                             <button onClick={(e) => {
                                                 e.preventDefault();
                                                 resolveCuento(cuento);
@@ -137,7 +147,17 @@ const Cuentos = () => {
                     page === "msg" && <Mensajes />
                 }
                 {
-                    page === "ramdom" && <Cuento />
+                    page === "ramdom" && 
+                    <div>
+                        <div className="d-flex justify-content-center">
+                        <div className="caja-cerrar-cuento text-end">
+                            <img role="button" src={azar}
+                             alt="" className="azar" onClick={(e) => { e.preventDefault(); resolveNewCuento()}}></img>
+                        </div>
+
+                    </div>
+                        <Cuento />
+                    </div>
                 }
 
 

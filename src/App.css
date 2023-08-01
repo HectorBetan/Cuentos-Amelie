@@ -142,7 +142,7 @@
   background-color: #e8e8e8;
   color: black;
   padding: 10px;
-  padding-top: 30px;
+  padding-top: 40px;
 }
 .caja-cerrar-cuento{
   width: 350px;
@@ -151,5 +151,11 @@
 }
 .caja-cerrar-cuento button{
   margin: 8px;
-  font-size: 18px;
+  font-size: 20px;
+}
+.azar{
+  margin: 6px;
+  width: 35px;
+  height: 35px;
+  z-index:1000;
 }
