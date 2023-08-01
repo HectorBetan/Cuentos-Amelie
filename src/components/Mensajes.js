@@ -53,10 +53,12 @@ const Mensajes = () => {
                 <h2 className="text-center">Mensajes</h2>
                 </div>
                 <label>Buscar</label><input onChange={changeBuscar}></input>
-                {!cargando && newMensajes.map((mensaje, i) => {
+                <div className="text-start">
+                        <div className="d-flex flex-column justify-content-center">
+                        {!cargando && newMensajes.map((mensaje, i) => {
                     if(!mensaje.privado){
                         return (
-                            <div className="" key={i}>
+                            <div className="cuento-box" key={i}>
                                 <div className="">
                                     <h5 className="">Asunto: {mensaje.asunto}</h5>
                                     <h5 className="">Usuario: {mensaje.user}</h5>
@@ -68,7 +70,7 @@ const Mensajes = () => {
                     } else{
                         if(admins.includes(user.email)){
                             return (
-                                <div className="" key={i}>
+                                <div className="cuento-box" key={i}>
                                     <div className="">
                                         <h5 className="">Asunto: {mensaje.asunto}</h5>
                                         <h5 className="">Usuario: {mensaje.user}</h5>
@@ -85,6 +87,9 @@ const Mensajes = () => {
                     
                 }
                 )}
+                        </div>
+                </div>
+                
                 {cargando && <div className="d-flex flex-column justify-content-center text-center">
                     <div
                         className="spinner-border m-2"

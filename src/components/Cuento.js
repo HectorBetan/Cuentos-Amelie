@@ -82,10 +82,10 @@ const Cuento = () => {
     } else {
 
         return (
-            <div>
+            <div className="d-flex justify-content-center">
+                <div className="caja-cuento">
                 <div className="d-flex justify-content-center">
                     <h2>{cuentoActual.titulo}</h2>
-                    <button onClick={(e) => { e.preventDefault(); noCuento(); if (start) { navigate(-1) } else { navigate("/cuentos") } }} className="btn btn-dark">Volver</button>
                 </div>
                 <h4>{cuentoActual.autor}</h4>
                 <h4>{cuentoActual.user}</h4>
@@ -93,6 +93,8 @@ const Cuento = () => {
                 <button onClick={descargarPDF} className="btn btn-primary">
                     Descargar en PDF
                 </button>
+                </div>
+                
             </div>
         )
 
