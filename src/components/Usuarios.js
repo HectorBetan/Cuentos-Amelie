@@ -56,7 +56,6 @@ const Cuentos = () => {
                 <div>
                     <div className="d-flex justify-content-center">
                         <h2 className="text-center">Usuarios</h2>
-                        <button onClick={(e) => { e.preventDefault(); navigate("/") }} className="btn btn-dark">Volver</button>
                     </div>
 
                     {usuarios.map((usuario, i) => {

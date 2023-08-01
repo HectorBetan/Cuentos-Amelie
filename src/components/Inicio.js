@@ -1,10 +1,67 @@
 import { useApp } from "../context/AppContext";
-import Logo from "../assets/logo.png"
-import Logo1 from "../assets/logo-horizontal.png"
+import Logo from "../assets/logo.png";
+import Logo1 from "../assets/logo-horizontal.png";
+import config from "../assets/config.png";
+import home from "../assets/home.png";
+import libro from "../assets/libro.png";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Cuentos from "./Cuentos";
+import Config from './Config';
 const Inicio = () => {
     const navigate = useNavigate()
     const { user, login, loading, cuentos, resolveCuento, misCuentos, admins, noauth, misMensajes } = useApp()
+    const [page, setPage] = useState("home")
+    const setPageHome = (e) =>{
+        e.preventDefault()
+        setPage("home")
+    }
+    const setPageCuentos = (e) =>{
+        e.preventDefault()
+        setPage("cuentos")
+    }
+    const setPageConfig = (e) =>{
+        e.preventDefault()
+        setPage("config")
+    }
+    const Navigation = () =>{
+        return (
+            <div className="navigation-btns">
+                <div className="d-flex flex-row justify-content-center">
+                    <div className={`lateral-1 ${page === "cuentos" ? "nav-selected" : "nav-not"}`} role="button" onClick={setPageCuentos}>
+                        <img className="libro-nav img-nav" src={libro} alt=""></img>
+                    </div>
+                    <div className={`lateral-2 ${page === "config" ? "nav-selected" : "nav-not"}`} role="button" onClick={setPageConfig}>
+                        <img className="config-nav img-nav" src={config} alt=""></img>
+                    </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center"><div className={`centro ${page === "home" ? "nav-selected" : "nav-not"}`} role="button" onClick={setPageHome}>
+                    <img className="home-nav  img-nav-centro" src={home} alt=""></img>
+                </div></div>
+
+            </div>
+
+        )
+    }
+    const HomeInfo = () => {
+        return (
+            <div className="w-100 h-100">
+                <div className="d-flex flex-row justify-content-center">
+                    <img className="logo-inicio" src={Logo1} alt=""></img>
+                </div>
+                <div className="text-center home-btns d-flex flex-column justify-content-center">
+                    <button onClick={(e) => { e.preventDefault(); navigate("/cuentos") }} className="btn btn-dark">Ver Cuentos</button>
+
+
+
+                    <button onClick={(e) => { e.preventDefault(); navigate("/publicar") }} className="btn btn-dark">Publicar Cuento</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/enviar") }} className="btn btn-dark">Enviar Mensaje</button>
+
+
+                </div>
+            </div>
+        )
+    }
     const Principal = () => {
         return (
             <div className="w-100 h-100">
@@ -12,7 +69,7 @@ const Inicio = () => {
                     <img className="logo-inicio" src={Logo1} alt=""></img>
                 </div>
                 <div className="text-center home-btns d-flex flex-column justify-content-center">
-                    <button onClick={(e) => { e.preventDefault(); navigate("/cuentos") }} className="btn btn-dark">Ver todos los cuentos</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/cuentos") }} className="btn btn-dark">Ver Cuentos</button>
                     <button onClick={(e) => { e.preventDefault(); navigate("/mensajes") }} className="btn btn-dark">Ver Mensajes</button>
 
                     <button onClick={(e) => { e.preventDefault(); navigate("/usuarios") }} className="btn btn-dark">Ver cuentos por Usuario</button>
@@ -70,7 +127,13 @@ const Inicio = () => {
             )
         } else {
             return (
-                <Principal />
+                <div className="margin-nav">
+                    {page === "home" && <HomeInfo />}
+                    {page === "cuentos" && <Cuentos />}
+                    {page === "config" && <Config />}
+                    <Navigation />
+                </div>
+
             )
         }
     }

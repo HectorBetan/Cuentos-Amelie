@@ -12,11 +12,10 @@
   align-self: center;
 }
 .logo-inicio{
-  max-width: 300px;
+  max-width: 340px;
   max-height: fit-content;
   object-fit: contain;
-  margin-left: 10px;
-  margin: 10px;
+  margin: 10px 0;
 }
 .home-btns{
   align-self: center;
@@ -24,7 +23,7 @@
 .home-btns button{
   align-self: center;
   width: 300px;
-  margin: 10px;
+  margin: 5px 0;
 }
 .publicar-cuento #asunto{
   width: 350px;
@@ -38,4 +37,93 @@
 .publicar-cuento textarea{
   width: 350px;
   height: 450px;
+}
+.navigation-btns{
+  position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: -75px;
+}
+.lateral-1{
+  width: 160px;
+  height: 160px;
+  border-radius: 50px;
+  padding: 20px;
+  text-align: start;
+  border: solid 2px #ffffffdd;
+}
+.lateral-2{
+  width: 160px;
+  height: 160px;
+  border-radius: 50px;
+  padding: 20px;
+  text-align: end;
+  border: solid 2px #ffffffdd;
+}
+.centro{
+  border: solid 3px #e8e8e8;
+  width: 150px;
+  height: 150px;
+  border-radius: 300px;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 30px;
+  text-align: center;
+  padding: 15px;
+}
+.margin-nav{
+  margin-bottom: 115px;
+}
+.img-nav{
+  
+  width: 50px;
+  height: 50px;
+}
+.img-nav-centro{
+  
+  width: 85px;
+  height: 75px;
+}
+.nav-selected{
+  background-color: rgb(125, 125, 255)!important;
+}
+.nav-not{
+  background-color: rgb(132, 200, 255);
+}
+.cuento-box{
+  min-width: 300px;
+  max-width: 450px;
+  align-self: center;
+  background-color: #f5f7f9;
+  color: rgb(6, 23, 48);
+  font-weight: 700!important;
+  margin: 5px;
+  padding: 15px;
+  border-radius: 25px;
+  font-size: 18px;
+}
+.cuento-info{
+  color: rgb(19, 67, 122);
+  font-weight: 600!important;
+}
+.menu-cuentos{
+  max-width: 500px;
+  min-width: 350px;
+}
+.menu-cuentos div{
+  width: 60px;
+  background-color: rgb(182, 210, 250);
+  border: solid 1px #4275a8;
+  border-top: solid 2px #4275a8;
+  border-bottom: solid 2px #4275a8;
+  text-align: center;
+  height: 60px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: center;
+}
+.menu-img{
+  width: 50px;
+  height: 50px;
+  align-self: center;
 }

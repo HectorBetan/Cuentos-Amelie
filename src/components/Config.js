@@ -47,7 +47,7 @@ const Config = () => {
 
     }, [usuarios, users])
     return (
-        <div>
+        <div className="text-center">
             <h1>Configuración</h1>
             <div>
                 <h4>Administrar Usuarios</h4>
@@ -60,7 +60,7 @@ const Config = () => {
                     {!cualquiera && <div>
                         {usuarios && usuarios.map((usuario, i) => {
                             return (
-                                <div key={i} className="d-flex flex-row">
+                                <div key={i} className="d-flex flex-row justify-content-center">
                                     <div className="fs-4 fw-bold">{usuario}</div>
                                     {deleteU !== i && <button className="btn btn-danger" onClick={(e) => {
                                         e.preventDefault()

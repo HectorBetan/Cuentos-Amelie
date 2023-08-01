@@ -56,7 +56,7 @@ const Autores = () => {
                     <div className="d-flex justify-content-center">
 
                         <h2 className="text-center">Autores</h2>
-                        <button onClick={(e) => { e.preventDefault(); navigate("/") }} className="btn btn-dark">Volver</button>
+
                     </div>
 
                     {autores.map((autor, i) => {

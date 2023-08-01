@@ -51,7 +51,6 @@ const Mensajes = () => {
                 <div className="d-flex justify-content-center">
                 
                 <h2 className="text-center">Mensajes</h2>
-                <button onClick={(e) => { e.preventDefault(); navigate("/") }} className="btn btn-dark">Volver</button>
                 </div>
                 <label>Buscar</label><input onChange={changeBuscar}></input>
                 {!cargando && newMensajes.map((mensaje, i) => {
