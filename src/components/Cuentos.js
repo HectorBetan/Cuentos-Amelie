@@ -14,17 +14,30 @@ import Mensajes from "./Mensajes";
 import Cuento from "./Cuento";
 import Logo1 from "../assets/logo-horizontal.png";
 const Cuentos = () => {
-    const { loading, cuentos, resolveCuento } = useApp()
+    const { loading, cuentos, resolveCuento, noCuento, aleatorio, cuento, resolveNoAleatorio } = useApp()
     const [newCuentos, setNewCuentos] = useState(cuentos)
     const [cargando, setCargando] = useState(false)
     const navigate = useNavigate()
     const [page, setPage] = useState("all")
-
+    const [cuentoF, setCuentoF] = useState(false)
+    const cerrarCuento = () => {
+        setCargando(true)
+        setCuentoF(false)
+        return setNoc()
+    }
+    const setNoc = () => {
+        noCuento()
+        setCargando(false)
+    }
     useEffect(() => {
+        if(aleatorio && cuento){
+            setPages("ramdom")
+            resolveNoAleatorio()
+        }
         if (!newCuentos && cuentos) {
             setNewCuentos(cuentos)
         }
-    }, [cuentos, newCuentos])
+    }, [cuentos, newCuentos, aleatorio, cuento, resolveNoAleatorio])
     const removeAccents = (str) => {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     };
@@ -80,30 +93,35 @@ const Cuentos = () => {
                     <div className="d-flex flex-row justify-content-center menu-cuentos">
                         <div role="button" onClick={(e) => {
                             e.preventDefault();
+                            setCuentoF(false)
                             setPages("all")
                         }} className={`${page === "all" && "nav-selected"}`}><img className={`menu-img`} src={libro1} alt=""></img></div>
                         <div role="button" onClick={(e) => {
                             e.preventDefault();
+                            setCuentoF(false)
                             setPages("user")
                         }} className={`${page === "user" && "nav-selected"}`}><img className="menu-img" src={usuario} alt=""></img></div>
                         <div role="button" onClick={(e) => {
                             e.preventDefault();
+                            setCuentoF(false)
                             setPages("autor")
                         }} className={`${page === "autor" && "nav-selected"}`}><img className="menu-img" src={lapiz} alt=""></img></div>
                         <div role="button" onClick={(e) => {
                             e.preventDefault();
+                            setCuentoF(false)
                             setPages("msg")
                         }} className={`${page === "msg" && "nav-selected"}`}><img className="menu-img" src={msg} alt=""></img></div>
                         <div role="button" onClick={(e) => {
                             e.preventDefault();
                             let num = Math.floor(Math.random() * cuentos.length)
                             resolveCuento(cuentos[num]); sessionStorage.setItem("location", true);
+                            setCuentoF(false)
                             setPages("ramdom")
                         }} className={`${page === "ramdom" && "nav-selected"}`}><img className="menu-img" src={ramdom} alt=""></img></div>
                     </div>
                 </div>
 
-                {page === "all" && <div>
+                {page === "all" && !cuentoF && <div>
                     <label className="m-2">Buscar</label><input onChange={changeBuscar}></input>
                     <div className="text-start">
                         <div className="d-flex flex-column justify-content-center">
@@ -118,7 +136,7 @@ const Cuentos = () => {
                                                 e.preventDefault();
                                                 resolveCuento(cuento);
                                                 sessionStorage.setItem("location", true)
-                                                navigate("/cuento")
+                                                setCuentoF(true)
                                             }}>Ver Cuento</button>
                                         </div>
                                     </div>
@@ -159,6 +177,17 @@ const Cuentos = () => {
                         <Cuento />
                     </div>
                 }
+                {cuentoF && !cargando && page === "all" &&
+                <div >
+                    <div className="d-flex justify-content-center">
+                        <div className="caja-cerrar-cuento text-end">
+                            <button className="btn-close" onClick={(e) => { e.preventDefault(); cerrarCuento() }}></button>
+                        </div>
+
+                    </div>
+                    <Cuento />
+                </div>
+            }
 
 
             </div>

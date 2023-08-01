@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext";
-
+import Logo1 from "../assets/logo-horizontal.png";
 const Config = () => {
-    const { users, registerUsers, removeUser } = useApp()
+    const { users, registerUsers, removeUser, misCuentos, misMensajes } = useApp()
     const [usuarios, setUsuarios] = useState([])
     const [cualquiera, setCualquiera] = useState(false)
     const [newUsers, setNewUsers] = useState("")
@@ -48,7 +48,16 @@ const Config = () => {
     }, [usuarios, users])
     return (
         <div className="text-center">
-            <h1>Configuración</h1>
+                            <div className="d-flex flex-row justify-content-center">
+                    <img className="logo-inicio" src={Logo1} alt=""></img>
+                </div>
+                <div>
+                {misCuentos && misCuentos.length > 0 && <button onClick={(e) => { e.preventDefault();  }} className="btn btn-dark">Ver mis Cuentos</button>
+                    }
+                    {misMensajes && misMensajes.length > 0 && <button onClick={(e) => { e.preventDefault();  }} className="btn btn-dark">Ver mis Mensajes</button>
+                    }
+                </div>
+                
             <div>
                 <h4>Administrar Usuarios</h4>
                 {<div>

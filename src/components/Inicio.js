@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Cuentos from "./Cuentos";
 import Config from './Config';
+import Modal from "react-bootstrap/Modal";
 const Inicio = () => {
     const navigate = useNavigate()
-    const { user, login, loading, cuentos, resolveCuento, misCuentos, admins, noauth, misMensajes } = useApp()
+    const { user, login, loading, cuentos, resolveCuento, misCuentos, admins, noauth, misMensajes, publicar, enviar, resolveAleatorio  } = useApp()
     const [page, setPage] = useState("home")
     const setPageHome = (e) => {
         e.preventDefault()
@@ -24,9 +25,144 @@ const Inicio = () => {
         e.preventDefault()
         setPage("config")
     }
+    const [cuento, setCuento] = useState({
+        titulo: "",
+        autor: "",
+        cuento: ""
+    })
+    const handleChange = ({ target: { value, name } }) => setCuento({ ...cuento, [name]: value });
+    const publicarCuento = async (e) =>{
+        e.preventDefault();
+        let c = {
+            user: user.displayName,
+            user_id: user.uid,
+            titulo: cuento.titulo,
+            autor: cuento.autor,
+            cuento: cuento.cuento
+        }
+        await publicar(c)
+        .then(()=>{
+            document.getElementById("titulo").value = ""
+            document.getElementById("autor").value = ""
+            document.getElementById("cuento").value = ""
+        })
+
+    }
+
+
+    const [showPublicar, setShowPublicar] = useState(false);
+
+    const handleClosePublicar = () => setShowPublicar(false);
+    const handleShowPublicar = () => setShowPublicar(true);
+    const ModalPublicar = () =>{
+        return (
+            <Modal show={showPublicar} onHide={handleClosePublicar} size="md">
+        <Modal.Header closeButton>
+          <Modal.Title>Publicar Cuento</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+                <form className="publicar-cuento">
+                    <div>Titulo</div>
+                    <input id="titulo" name="titulo" onChange={handleChange}></input>
+                    <div>Autor</div>
+                    <input id="autor" name="autor"  onChange={handleChange}></input>
+                    <div>Cuento</div>
+                    <textarea id="cuento" name="cuento"  onChange={handleChange}></textarea>
+                    <div>
+                    <Modal.Footer>
+                    
+                    <button onClick={(e)=>{e.preventDefault(); handleClosePublicar()}}  className="btn btn-dark">Cancelar</button>
+                    <button onClick={publicarCuento} className="btn btn-dark">Publicar Cuento</button>
+                    </Modal.Footer>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
+    const [msg, setMsg] = useState({
+        asunto: "",
+        msg: ""
+    })
+    const [privado, setPrivado] = useState(false)
+    const changePrivado = (e) =>{
+        if(e.target.checked){
+            setPrivado(true)
+        } else{
+            setPrivado(false)
+        }
+    }
+    const enviarMsg = async (e) =>{
+        e.preventDefault();
+        let c = {
+            user: user.displayName,
+            user_id: user.uid,
+            asunto: msg.asunto,
+            mensaje: msg.msg,
+            privado: privado,
+        }
+        await enviar(c)
+        .then(()=>{
+            document.getElementById("asunto").value = ""
+            document.getElementById("msg").value = ""
+            document.getElementById("privado").checked = false
+            setMsg({
+                asunto: "",
+                msg: ""
+            })
+            setPrivado(false)
+        })
+
+    }
+    const handleChangeMsg = ({ target: { value, name } }) => setMsg({ ...msg, [name]: value });
+    const [showMsg, setShowMsg] = useState(false);
+
+    const handleCloseMsg = () => setShowMsg(false);
+    const handleShowMsg = () => setShowMsg(true);
+    const ModalMsg = () =>{
+        return (
+            <Modal show={showMsg} onHide={handleCloseMsg} size="md">
+        <Modal.Header closeButton>
+          <Modal.Title>Publicar Cuento</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+                <form className="publicar-cuento">
+                    <div>Asunto</div>
+                    <input type="text" id="asunto" name="asunto" onChange={handleChangeMsg}></input>
+                    <div>Mensaje</div>
+                    <textarea type="text" id="msg" name="msg"  onChange={handleChangeMsg}></textarea>
+                    <div>
+                        <input id="privado" onChange={changePrivado} type="checkbox"></input>
+                        Deseo que mi mensaje sea privado
+                    </div>
+                    <div>
+                    
+                    <Modal.Footer>
+                    
+                    <button onClick={(e)=>{e.preventDefault(); handleCloseMsg()}}  className="btn btn-dark">Cancelar</button>
+                    <button onClick={enviarMsg} className="btn btn-dark">Enviar Mensaje</button>
+                    </Modal.Footer>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
     const Navigation = () => {
         return (
             <div className="navigation-btns">
+                
                 <div className="d-flex flex-row justify-content-center">
                     <div className={`lateral-1 ${page === "cuentos" ? "nav-selected" : "nav-not"}`} role="button" onClick={setPageCuentos}>
                         <img className="libro-nav img-nav" src={libro} alt=""></img>
@@ -49,13 +185,18 @@ const Inicio = () => {
                 <div className="d-flex flex-row justify-content-center">
                     <img className="logo-inicio" src={Logo1} alt=""></img>
                 </div>
+                <ModalPublicar />
+                <ModalMsg />
                 <div className="text-center home-btns d-flex flex-column justify-content-center">
-                    <button onClick={(e) => { e.preventDefault(); navigate("/cuentos") }} className="btn btn-dark">Ver Cuentos</button>
+                    <button onClick={setPageCuentos} className="btn btn-dark">Ver Cuentos</button>
+
+                    <button onClick={(e) => { e.preventDefault();let num = Math.floor(Math.random() * cuentos.length)
+                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="btn btn-dark">Ver Cuento Aleatorio</button>
 
 
-
-                    <button onClick={(e) => { e.preventDefault(); navigate("/publicar") }} className="btn btn-dark">Publicar Cuento</button>
-                    <button onClick={(e) => { e.preventDefault(); navigate("/enviar") }} className="btn btn-dark">Enviar Mensaje</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className="btn btn-dark">Publicar Cuento</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className="btn btn-dark">Enviar Mensaje</button>
+                    
 
 
                 </div>

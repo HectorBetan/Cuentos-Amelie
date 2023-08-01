@@ -14,13 +14,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(42, 202, 255)!important;        /* color of the tracking area */
+  background: rgb(44, 132, 161)!important;        /* color of the tracking area */
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: rgb(4, 16, 41)!important;    /* color of the scroll thumb */
   border-radius: 15px!important;       /* roundness of the scroll thumb */
-  border: 1px solid rgb(42, 202, 255)!important;  /* creates padding around scroll thumb */
+  border: 0.5px solid rgb(44, 132, 161)!important;  /* creates padding around scroll thumb */
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

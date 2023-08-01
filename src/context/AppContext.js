@@ -37,6 +37,13 @@ export function AppProvider({ children }) {
     const [mensajes, setMensajes] = useState(null);
     const [misMensajes, setMisMensajes] = useState(null);
     const [noauth, setNoauth] = useState(false);
+    const [aleatorio, setAleatorio] = useState(false);
+    const resolveAleatorio = () =>{
+        setAleatorio(true)
+    }
+    const resolveNoAleatorio = () =>{
+        setAleatorio(false)
+    }
     const resolveCuento = (cuento) => {
         setCuento(cuento)
     }
@@ -355,6 +362,9 @@ export function AppProvider({ children }) {
                 misMensajes,
                 registerUsers,
                 removeUser,
+                aleatorio,
+                resolveAleatorio,
+                resolveNoAleatorio,
             }}
         >
             {children}

@@ -50,7 +50,7 @@
   border-radius: 50px;
   padding: 20px;
   text-align: start;
-  border: solid 2px #ffffffdd;
+  border: solid 3px #031c35ec;
 }
 .lateral-2{
   width: 160px;
@@ -58,10 +58,10 @@
   border-radius: 50px;
   padding: 20px;
   text-align: end;
-  border: solid 2px #ffffffdd;
+  border: solid 3px #031c35ec;
 }
 .centro{
-  border: solid 3px #e8e8e8;
+  border: solid 3px #031c35ec;
   width: 150px;
   height: 150px;
   border-radius: 300px;
@@ -93,7 +93,7 @@
 .cuento-box{
   width: 350px;
   align-self: center;
-  background-color: #f5f7f9;
+  background-color: #ffffff;
   color: rgb(6, 23, 48);
   font-weight: 700!important;
   margin: 5px;
@@ -128,7 +128,7 @@
   align-self: center;
 }
 .caja-autor{
-  background-color: #e8e8e8;
+  background-color: #ffffff;
   border-radius: 25px;
   margin: 5px;
   padding: 10px;
@@ -139,7 +139,7 @@
   border-radius: 25px;
   width: 350px;
   text-align: justify;
-  background-color: #e8e8e8;
+  background-color: #ffffff;
   color: black;
   padding: 10px;
   padding-top: 40px;

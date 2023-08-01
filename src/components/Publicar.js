@@ -49,7 +49,6 @@ const Publicar = () => {
     }
     return (
         <div className="text-center">
-            <h2>Publicar Cuento</h2>
             <div>
                 <form className="publicar-cuento">
                     <div>Titulo</div>
