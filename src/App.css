@@ -187,3 +187,28 @@
   border-radius: 10px 10px 0 0;
   padding: 10px;
 }
+.btn-login{
+  animation: ronda 2s;
+}
+
+@keyframes ronda {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.users-box{
+  width: 350px;
+  align-self: center;
+  margin: 2px!important;
+  padding: 5px 10px!important;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.838)!important;
+}

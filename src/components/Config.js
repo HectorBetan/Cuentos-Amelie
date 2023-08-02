@@ -5,19 +5,11 @@ import Logo1 from "../assets/logo-horizontal.png";
 import MisCuentos from "./MisCuentos"
 import MisMensajes from "./MisMensajes"
 const Config = () => {
-    const { users, registerUsers, removeUser, misCuentos, misMensajes } = useApp()
+    const { users, addBlock, removeBlock, misCuentos, misMensajes, block } = useApp()
     const [usuarios, setUsuarios] = useState([])
-    const [cualquiera, setCualquiera] = useState(false)
     const [newUsers, setNewUsers] = useState("")
     const [deleteU, setDeleteU] = useState("")
     const [ventana, setVentana] = useState(null)
-    const changeCualq = (e) => {
-        if (e.target.checked) {
-            setCualquiera(true)
-        } else {
-            setCualquiera(false)
-        }
-    }
     const addDelete = (i) => {
         setDeleteU(i)
     }
@@ -25,27 +17,20 @@ const Config = () => {
         setNewUsers(e.target.value)
     }
     const handleDelete = async (user) => {
-        await removeUser(user)
+        await removeBlock(user)
         setUsuarios([])
     }
     const registrarUsuarios = (e) => {
         e.preventDefault()
-        if (cualquiera) {
-            registerUsers("cualquiera")
-        } else {
-            registerUsers(newUsers)
-        }
+
+            addBlock(newUsers)
+        
         document.getElementById("users").value = ""
         setUsuarios([])
     }
     useEffect(() => {
         if (users && (!usuarios || usuarios.length === 0)) {
             setUsuarios(users)
-            if (users.includes("cualquiera")) {
-                setCualquiera(true)
-            } else {
-                setCualquiera(false)
-            }
         }
 
     }, [usuarios, users])
@@ -86,33 +71,50 @@ const Config = () => {
                 <h4>Administrar Usuarios</h4>
                 {<div>
 
-                    <div>
-                        <input id="privado" onChange={changeCualq} type="checkbox" checked={cualquiera}></input>
-                        Permitir cualquier usuario
-                    </div>
-                    {!cualquiera && <div>
-                        {usuarios && usuarios.map((usuario, i) => {
-                            return (
-                                <div key={i} className="d-flex flex-row justify-content-center">
-                                    <div className="fs-4 fw-bold">{usuario}</div>
-                                    {deleteU !== i && <button className="btn btn-danger" onClick={(e) => {
-                                        e.preventDefault()
-                                        addDelete(i)
-                                    }}><i className="bi bi-trash fs-5"></i></button>}
-                                    {deleteU === i &&
-                                        <div>
-                                            <button className="btn btn-danger" onClick={(e) => {
-                                                handleDelete(usuario)
-                                            }} ><i className="bi bi-check-lg fs-5"></i></button>
-                                            <button className="btn btn-secondary" onClick={(e) => {
-                                                e.preventDefault()
-                                                addDelete("")
-                                            }}><i className="bi bi-x-lg fs-5"></i></button>
+                   <div>
+                        {block && usuarios && usuarios.map((usuario, i) => {
+                            if(usuario !== "all"){
+                                let use = usuario.split(",")
+                                return (
+                                    <div key={i} className="d-flex justify-content-center">
+<div className={`d-flex flex-row justify-content-between alert ${block.includes(use[0]) ? "alert-danger" : "alert-primary"} users-box`}>
+                                        <div className="d-flex flex-column text-start">
+                                        <div className="">{use[1]}</div>
+                                        <div className="">{use[0]}</div>
                                         </div>
-                                    }
+                                        
+                                        <div>
+                                        
 
-                                </div>
-                            )
+                                        {deleteU !== i && <button className={`btn ${block.includes(use[0]) ? "btn-success" : "btn-danger"}`} onClick={(e) => {
+                                            e.preventDefault()
+                                            addDelete(i)
+                                        }}>
+                                            {block.includes(use[0]) && <i className="bi bi-person-fill-check"></i>}
+                                            {!block.includes(use[0]) && <i className="bi bi-person-fill-slash"></i>}
+                                            </button>}
+                                        {deleteU === i &&
+                                            <div>
+                                                <button className="btn btn-danger" onClick={(e) => {
+                                                    handleDelete(usuario)
+                                                }} ><i className="bi bi-check-lg fs-5"></i></button>
+                                                <button className="btn btn-secondary" onClick={(e) => {
+                                                    e.preventDefault()
+                                                    addDelete("")
+                                                }}><i className="bi bi-x-lg fs-5"></i></button>
+                                            </div>
+                                        }
+                                        </div>
+                                        
+    
+                                    </div>
+                                    </div>
+                                    
+                                )
+                            } else {
+                                return false
+                            }
+                            
                         })}
                         <form onSubmit={registrarUsuarios}>
                             <div>
@@ -123,7 +125,7 @@ const Config = () => {
                                 <input id="users" onChange={handleChange} type="text" required></input>
                             </div>
                         </form>
-                    </div>}
+                    </div>
 
 
                     <button type="submit">Guardar</button>

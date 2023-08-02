@@ -17,6 +17,7 @@ import {
     getDoc,
     deleteDoc,
     arrayRemove,
+    arrayUnion,
     collection,
     getDocs,
 } from "firebase/firestore";
@@ -31,6 +32,7 @@ export function AppProvider({ children }) {
     const [user, setUser] = useState(null);
     const [admins, setAdmins] = useState(null);
     const [users, setUsers] = useState(null);
+    const [block, setBlock] = useState(null);
     const [cuentos, setCuentos] = useState(null);
     const [cuento, setCuento] = useState(null);
     const [misCuentos, setMisCuentos] = useState(null);
@@ -172,7 +174,7 @@ export function AppProvider({ children }) {
         setCuentos(c)
         setMisCuentos(d)
     }
-    const registerUsers = async (usuarios) =>{
+    const addBlock = async (usuarios) =>{
         let u = []
         if(usuarios.includes(",")){
             u = usuarios.split(",")
@@ -184,13 +186,14 @@ export function AppProvider({ children }) {
         setUsers(u)
         const docRef = doc(db, "users", "users");
         await updateDoc((docRef), {
-            users: u,
+            block: u,
         });
     }
-    const removeUser = async (usuario) =>{
+
+    const removeBlock = async (usuario) =>{
         const docRef = doc(db, "users", "users");
         await updateDoc((docRef), {
-            users: arrayRemove(usuario),
+            block: arrayRemove(usuario),
         });
         let u = users
         u.splice(u.indexOf(usuario), 1)
@@ -299,39 +302,74 @@ export function AppProvider({ children }) {
                     console.log(err)
                 })
         }
+        const getBlock = async () => {
+            const docRef = doc(db, "users", "users");
+            await getDoc(docRef)
+                .then((res) => {
+                    if (res.data()) {
+                        let data = res.data()
+                        setBlock(data.block)
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        if (!block) {
+            getBlock();
+        }
         if (!admins) {
             getAdmins();
         }
         if (!users) {
             getUsers();
         }
-    }, [admins, users]);
+    }, [admins, users, block]);
     useEffect(() => {
+        
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                if (admins && users && (admins.includes(currentUser.email) || users.includes(currentUser.email) || users.includes("cualquiera"))) {
+                if (admins && users && block && (admins.includes(currentUser.email) || !block.includes(currentUser.email))) {
                     setUser(currentUser);
+                    let a = false
+                    for (let i = 0; i < users.length; i++) {
+                        let u = users[i].split(",")
+                        if (u[0] === currentUser.email) {
+                            a = true
+                        }
+                    }
+                    if (!a){
+                        let u = []
+                        let l = currentUser.email+","+currentUser.displayName
+                        u = users.concat(l)
+                        u = Array.from(new Set(u));
+                        setUsers(u)
+                        const docRef = doc(db, "users", "users");
+                        updateDoc((docRef), {
+                            users: u,
+                        });
+                    }
                 } else {
                     setUser(null);
                     setTimeout(()=>{
                         setNoauth(true)
-                    },1000)
+                        setLoading(false);
+                    },3000)
                    
                 }
+                setLoading(false);
             } else {
                 setUser(null);
+                setLoading(false);
             }
-            setLoading(false);
+            
         });
-        if (admins && users) {
+        if (admins && users && block) {
             return () => unsubscribe();
         }
-    }, [admins, users]);
-    if(noauth){
-        setTimeout(()=>{
-            setNoauth(false)
-        },4000)
-    }
+    }, [admins, users, block]);
+
 
     return (
         <appContext.Provider
@@ -360,11 +398,12 @@ export function AppProvider({ children }) {
                 editarCuento,
                 editarMsg,
                 misMensajes,
-                registerUsers,
-                removeUser,
+                addBlock,
                 aleatorio,
                 resolveAleatorio,
                 resolveNoAleatorio,
+                block,
+                removeBlock,
             }}
         >
             {children}
