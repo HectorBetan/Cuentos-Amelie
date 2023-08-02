@@ -159,3 +159,31 @@
   height: 35px;
   z-index:1000;
 }
+.config-box{
+  width: 320px;
+  align-self: center;
+  background-color: #d6e5ff;
+  color: rgb(6, 23, 48);
+  font-weight: 700!important;
+  padding: 15px;
+  border-radius: 25px;
+  font-size: 18px;
+}
+.mios-box{
+  background-color: #ffffff;
+  margin: 10px 0;
+  border-radius: 25px;
+  padding: 10px;
+}
+.btn-config{
+  width: 139px;
+  background-color: rgb(182, 210, 250);
+  border: solid 1px #4275a8;
+  border-top: solid 2px #4275a8;
+  border-bottom: none;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+}

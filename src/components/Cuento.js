@@ -84,13 +84,21 @@ const Cuento = () => {
         return (
             <div className="d-flex justify-content-center">
                 <div className="caja-cuento">
-                <div className="d-flex justify-content-center">
+                <div className="text-center">
                     <h2>{cuentoActual.titulo}</h2>
+                    <h4>Autor: {cuentoActual.autor}</h4>
+                <h6 className="mb-4">Publicado por {cuentoActual.user}</h6>
                 </div>
-                <h4>{cuentoActual.autor}</h4>
-                <h4>{cuentoActual.user}</h4>
-                <p>{cuentoActual.cuento}</p>
-                <button onClick={descargarPDF} className="btn btn-primary">
+                
+                {cuentoActual.cuento.split(".").map((c,i)=>{
+                    if(c.length !== 0){
+                        return(
+                            <p key={i}>{c+"."}<br /></p>
+                        )
+                    }
+                    return false
+                })}
+                <button onClick={descargarPDF} className="btn btn-primary mt-3">
                     Descargar en PDF
                 </button>
                 </div>

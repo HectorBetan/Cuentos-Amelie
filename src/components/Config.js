@@ -2,12 +2,15 @@
 import { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import Logo1 from "../assets/logo-horizontal.png";
+import MisCuentos from "./MisCuentos"
+import MisMensajes from "./MisMensajes"
 const Config = () => {
     const { users, registerUsers, removeUser, misCuentos, misMensajes } = useApp()
     const [usuarios, setUsuarios] = useState([])
     const [cualquiera, setCualquiera] = useState(false)
     const [newUsers, setNewUsers] = useState("")
     const [deleteU, setDeleteU] = useState("")
+    const [ventana, setVentana] = useState(null)
     const changeCualq = (e) => {
         if (e.target.checked) {
             setCualquiera(true)
@@ -48,16 +51,37 @@ const Config = () => {
     }, [usuarios, users])
     return (
         <div className="text-center">
-                            <div className="d-flex flex-row justify-content-center">
-                    <img className="logo-inicio" src={Logo1} alt=""></img>
-                </div>
-                <div>
-                {misCuentos && misCuentos.length > 0 && <button onClick={(e) => { e.preventDefault();  }} className="btn btn-dark">Ver mis Cuentos</button>
+            <div className="d-flex flex-row justify-content-center">
+                <img className="logo-inicio" src={Logo1} alt=""></img>
+            </div>
+            <div>
+                {misCuentos && misCuentos.length > 0 && <button onClick={(e) => {
+                    e.preventDefault();
+                    if (ventana !== "cuentos") {
+                        setVentana("cuentos")
                     }
-                    {misMensajes && misMensajes.length > 0 && <button onClick={(e) => { e.preventDefault();  }} className="btn btn-dark">Ver mis Mensajes</button>
+                    if (ventana === "cuentos") {
+                        setVentana(null)
                     }
+                }} className="btn-config">Mis Cuentos</button>
+                }
+                {misMensajes && misMensajes.length > 0 && <button onClick={(e) => {
+                    e.preventDefault();
+                    if (ventana !== "mensajes") {
+                        setVentana("mensajes")
+                    }
+                    if (ventana === "mensajes") {
+                        setVentana(null)
+                    }
+                }} className="btn-config">Mis Mensajes</button>
+                }
+            </div>
+            {ventana && <div className="d-flex justify-content-center">
+                <div className="config-box">
+                    {ventana === "cuentos" && <MisCuentos />}
+                    {ventana === "mensajes" && <MisMensajes />}
                 </div>
-                
+            </div>}
             <div>
                 <h4>Administrar Usuarios</h4>
                 {<div>
@@ -106,6 +130,14 @@ const Config = () => {
 
 
                 </div>}
+            </div>
+            <div>
+                <button onClick={(e) => { e.preventDefault(); }} className="btn btn-dark">Cambiar Nombre</button>
+
+            </div>
+            <div>
+                <button onClick={(e) => { e.preventDefault(); }} className="btn btn-dark">Eliminar Cuenta</button>
+
             </div>
         </div>
     )

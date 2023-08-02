@@ -73,8 +73,8 @@ const Inicio = () => {
                     <div>
                     <Modal.Footer>
                     
-                    <button onClick={(e)=>{e.preventDefault(); handleClosePublicar()}}  className="btn btn-dark">Cancelar</button>
-                    <button onClick={publicarCuento} className="btn btn-dark">Publicar Cuento</button>
+                    <button onClick={(e)=>{e.preventDefault(); handleClosePublicar()}}  className="btn btn-primary">Cancelar</button>
+                    <button onClick={publicarCuento} className="btn btn-primary">Publicar Cuento</button>
                     </Modal.Footer>
                     </div>
 
@@ -147,8 +147,8 @@ const Inicio = () => {
                     
                     <Modal.Footer>
                     
-                    <button onClick={(e)=>{e.preventDefault(); handleCloseMsg()}}  className="btn btn-dark">Cancelar</button>
-                    <button onClick={enviarMsg} className="btn btn-dark">Enviar Mensaje</button>
+                    <button onClick={(e)=>{e.preventDefault(); handleCloseMsg()}}  className="btn btn-primary">Cancelar</button>
+                    <button onClick={enviarMsg} className="btn btn-primary">Enviar Mensaje</button>
                     </Modal.Footer>
                     </div>
                 </form>
@@ -188,14 +188,14 @@ const Inicio = () => {
                 <ModalPublicar />
                 <ModalMsg />
                 <div className="text-center home-btns d-flex flex-column justify-content-center">
-                    <button onClick={setPageCuentos} className="btn btn-dark">Ver Cuentos</button>
+                    <button onClick={setPageCuentos} className="btn btn-primary">Ver Cuentos</button>
 
                     <button onClick={(e) => { e.preventDefault();let num = Math.floor(Math.random() * cuentos.length)
-                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="btn btn-dark">Ver Cuento Aleatorio</button>
+                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="btn btn-primary">Ver Cuento Aleatorio</button>
 
 
-                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className="btn btn-dark">Publicar Cuento</button>
-                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className="btn btn-dark">Enviar Mensaje</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className="btn btn-primary">Publicar Cuento</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className="btn btn-primary">Enviar Mensaje</button>
                     
 
 
@@ -210,22 +210,22 @@ const Inicio = () => {
                     <img className="logo-inicio" src={Logo1} alt=""></img>
                 </div>
                 <div className="text-center home-btns d-flex flex-column justify-content-center">
-                    <button onClick={(e) => { e.preventDefault(); navigate("/cuentos") }} className="btn btn-dark">Ver Cuentos</button>
-                    <button onClick={(e) => { e.preventDefault(); navigate("/mensajes") }} className="btn btn-dark">Ver Mensajes</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/cuentos") }} className="btn btn-primary">Ver Cuentos</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/mensajes") }} className="btn btn-primary">Ver Mensajes</button>
 
-                    <button onClick={(e) => { e.preventDefault(); navigate("/usuarios") }} className="btn btn-dark">Ver cuentos por Usuario</button>
-                    <button onClick={(e) => { e.preventDefault(); navigate("/autores") }} className="btn btn-dark">Ver cuentos por Autor</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/usuarios") }} className="btn btn-primary">Ver cuentos por Usuario</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/autores") }} className="btn btn-primary">Ver cuentos por Autor</button>
                     {cuentos && <button onClick={(e) => {
                         e.preventDefault(); let num = Math.floor(Math.random() * cuentos.length)
                         resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); navigate("/cuento")
-                    }} className="btn btn-dark">Ver cuento Aleatorio</button>}
-                    {misCuentos && misCuentos.length > 0 && <button onClick={(e) => { e.preventDefault(); navigate("/mis-cuentos") }} className="btn btn-dark">Ver mis Cuentos</button>
+                    }} className="btn btn-primary">Ver cuento Aleatorio</button>}
+                    {misCuentos && misCuentos.length > 0 && <button onClick={(e) => { e.preventDefault(); navigate("/mis-cuentos") }} className="btn btn-primary">Ver mis Cuentos</button>
                     }
-                    {misMensajes && misMensajes.length > 0 && <button onClick={(e) => { e.preventDefault(); navigate("/mis-mensajes") }} className="btn btn-dark">Ver mis Mensajes</button>
+                    {misMensajes && misMensajes.length > 0 && <button onClick={(e) => { e.preventDefault(); navigate("/mis-mensajes") }} className="btn btn-primary">Ver mis Mensajes</button>
                     }
-                    <button onClick={(e) => { e.preventDefault(); navigate("/publicar") }} className="btn btn-dark">Publicar Cuento</button>
-                    <button onClick={(e) => { e.preventDefault(); navigate("/enviar") }} className="btn btn-dark">Enviar Mensaje</button>
-                    {admins.includes(user.email) && <button onClick={(e) => { e.preventDefault(); navigate("/admin") }} className="btn btn-dark">Configuración</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/publicar") }} className="btn btn-primary">Publicar Cuento</button>
+                    <button onClick={(e) => { e.preventDefault(); navigate("/enviar") }} className="btn btn-primary">Enviar Mensaje</button>
+                    {admins.includes(user.email) && <button onClick={(e) => { e.preventDefault(); navigate("/admin") }} className="btn btn-primary">Configuración</button>
                     }
                 </div>
             </div>
