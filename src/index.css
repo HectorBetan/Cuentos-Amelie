@@ -9,12 +9,12 @@ body {
   color: white;
 }
 input{
-  background-color: #edf7fff6;
+  background-color: #f4f6f7fc;
   color: rgb(3, 17, 36);
   border-radius: 5px;
 }
 textarea{
-  background-color: #edf7fff6;
+  background-color: #f4f6f7fc;
   color: rgb(3, 17, 36);
   border-radius: 5px;
 }

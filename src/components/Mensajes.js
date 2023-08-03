@@ -33,10 +33,12 @@ const Mensajes = () => {
     const deleteC = async (id) => {
         await deleteMsg(id)
         handleCloseDelete()
+        handleShowAlertDelete()
     }
     const updateC = async (id, mensaje) => {
         await editarMsg(id, mensaje)
         handleCloseEdit()
+        handleShowAlertEdit()
     }
     const [id, setId] = useState("")
     const [showDelete, setShowDelete] = useState(false)
@@ -136,6 +138,56 @@ const Mensajes = () => {
         }
 
     }
+    const [showAlertDelete, setShowAlertDelete] = useState(false);
+
+    if (showAlertDelete){
+        setTimeout(() => {
+            setShowAlertDelete(false)
+        },3000)
+    }
+    const handleShowAlertDelete = () => {setTimeout(() => {
+        setShowAlertDelete(true)
+    },1000)}
+    const ModalAlertDelete = () =>{
+        
+        return (
+            <Modal show={showAlertDelete} size="sm">
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+               Se ha eliminado el mensaje
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
+    const [showAlertEdit, setShowAlertEdit] = useState(false);
+
+    if (showAlertEdit){
+        setTimeout(() => {
+            setShowAlertEdit(false)
+        },3000)
+    }
+    const handleShowAlertEdit = () => {setTimeout(() => {
+        setShowAlertEdit(true)
+    },1000)}
+    const ModalAlertEdit = () =>{
+        
+        return (
+            <Modal show={showAlertEdit} size="sm">
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+               Se ha editado el mensaje
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
     if (loading || !mensajes || !newMensajes) {
         return (
             <div className="text-center d-flex flex-column justify-content-center h-100"
@@ -158,6 +210,8 @@ const Mensajes = () => {
             <div>
                 <ModalDelete />
                 <ModalEdit />
+                <ModalAlertDelete />
+                <ModalAlertEdit />
                 <div className="d-flex justify-content-center">
 
                     <h2 className="text-center">Mensajes</h2>

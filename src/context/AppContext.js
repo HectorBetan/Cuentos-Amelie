@@ -40,6 +40,7 @@ export function AppProvider({ children }) {
     const [misMensajes, setMisMensajes] = useState(null);
     const [noauth, setNoauth] = useState(false);
     const [aleatorio, setAleatorio] = useState(false);
+    const [cargando1, setCargando1] = useState(false)
     const resolveAleatorio = () =>{
         setAleatorio(true)
     }
@@ -123,7 +124,7 @@ export function AppProvider({ children }) {
             }
         }
         let d = misCuentos
-        for(let i = 0; i < c.length; i++){
+        for(let i = 0; i < d.length; i++){
             if (d[i].id === id){
                 d[i].titulo = cuento.titulo
                 d[i].autor = cuento.autor
@@ -142,7 +143,7 @@ export function AppProvider({ children }) {
                 c.push(msg)
             }
         })
-        setCuentos(c)
+        setMensajes(c)
         let d = []
         c.forEach((msg) => {
             if (msg.user_id === user.uid){
@@ -164,40 +165,36 @@ export function AppProvider({ children }) {
             }
         }
         let d = misMensajes
-        for(let i = 0; i < c.length; i++){
+        for(let i = 0; i < d.length; i++){
             if (d[i].id === id){
                 d[i].asunto = mensaje.asunto
                 d[i].mensaje = mensaje.mensaje
                 d[i].privado = mensaje.privado
             }
         }
-        setCuentos(c)
-        setMisCuentos(d)
+        setMensajes(c)
+        setMisMensajes(d)
     }
-    const addBlock = async (usuarios) =>{
+    const addBlock = async (usuario) =>{
         let u = []
-        if(usuarios.includes(",")){
-            u = usuarios.split(",")
-        } else{
-            u.push(usuarios)
-        }
-        u = users.concat(u)
-        u = Array.from(new Set(u));
-        setUsers(u)
+        u = block.concat(usuario)
+        console.log(u)
         const docRef = doc(db, "users", "users");
         await updateDoc((docRef), {
             block: u,
         });
+        setBlock(u)
     }
 
     const removeBlock = async (usuario) =>{
         const docRef = doc(db, "users", "users");
+        console.log(usuario)
         await updateDoc((docRef), {
             block: arrayRemove(usuario),
         });
-        let u = users
+        let u = block
         u.splice(u.indexOf(usuario), 1)
-        setUsers(u)
+        setBlock(u)
     }
     useEffect(() => {
         const resolveCuentos = () => {

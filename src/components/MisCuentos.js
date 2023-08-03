@@ -29,11 +29,6 @@ const MisCuentos = () => {
     const handleShowCuento = () => setShowCuento(true);
     const ModalCuento = () => {
         console.log(mios)
-        let c
-        if(id){
-            c = mios.find((m) => m.id === id)
-        }
-        console.log(c)
         return (
             <Modal show={showCuento} onHide={handleCloseCuento}>
                 <div className="text-end cerrar-config">

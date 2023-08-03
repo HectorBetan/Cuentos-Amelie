@@ -228,7 +228,7 @@ const Cuentos = () => {
 
                                 <div className="d-flex flex-row justify-content-end">
                                     <button onClick={descargarPDF} className="btn btn-primary m-1">
-                                        Descargar
+                                    <i class="bi bi-file-earmark-arrow-down"></i>
                                     </button>
                                     {(admins.includes(user.email) || user.uid === cuento.user_id) && <div>
                                         <button className="btn btn-primary m-1" onClick={(e) => {

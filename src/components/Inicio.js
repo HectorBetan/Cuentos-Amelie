@@ -9,6 +9,10 @@ import { useState } from "react";
 import Cuentos from "./Cuentos";
 import Config from './Config';
 import Modal from "react-bootstrap/Modal";
+import libro1 from "../assets/libro1.png";
+import ramdom from "../assets/ramdom.png";
+import lapiz from "../assets/lapiz.png";
+import msg1 from "../assets/msg.png";
 const Inicio = () => {
     const navigate = useNavigate()
     const { user, login, loading, cuentos, resolveCuento, misCuentos, admins, noauth, misMensajes, publicar, enviar, resolveAleatorio  } = useApp()
@@ -50,9 +54,12 @@ const Inicio = () => {
             }
             await publicar(c)
             .then(()=>{
+                handleClosePublicar()
+                handleShowAlertPublicar()
                 document.getElementById("titulo").value = ""
                 document.getElementById("autor").value = ""
                 document.getElementById("cuento").value = ""
+                
             })
     
         }
@@ -88,46 +95,100 @@ const Inicio = () => {
       </Modal>
           );
     }
-    const [msg, setMsg] = useState({
-        asunto: "",
-        msg: ""
-    })
-    const [privado, setPrivado] = useState(false)
-    const changePrivado = (e) =>{
-        if(e.target.checked){
-            setPrivado(true)
-        } else{
-            setPrivado(false)
-        }
-    }
-    const enviarMsg = async (e) =>{
-        e.preventDefault();
-        let c = {
-            user: user.displayName,
-            user_id: user.uid,
-            asunto: msg.asunto,
-            mensaje: msg.msg,
-            privado: privado,
-        }
-        await enviar(c)
-        .then(()=>{
-            document.getElementById("asunto").value = ""
-            document.getElementById("msg").value = ""
-            document.getElementById("privado").checked = false
-            setMsg({
-                asunto: "",
-                msg: ""
-            })
-            setPrivado(false)
-        })
+    const [showAlertPublicar, setShowAlertPublicar] = useState(false);
 
+    if (showAlertPublicar){
+        setTimeout(() => {
+            setShowAlertPublicar(false)
+        },3000)
     }
-    const handleChangeMsg = ({ target: { value, name } }) => setMsg({ ...msg, [name]: value });
+    const handleShowAlertPublicar = () => {setTimeout(() => {
+        setShowAlertPublicar(true)
+    },1000)};
+    const ModalAlertPublicar = () =>{
+        
+        return (
+            <Modal show={showAlertPublicar} size="sm">
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+               Se ha publicado tu texto correctamente
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
+    const [showAlertMsg, setShowAlertMsg] = useState(false);
+
+    if (showAlertMsg){
+        setTimeout(() => {
+            setShowAlertMsg(false)
+        },3000)
+    }
+    const handleShowAlertMsg = () => {setTimeout(() => {
+        setShowAlertMsg(true)
+    },1000)}
+    const ModalAlertMsg = () =>{
+        
+        return (
+            <Modal show={showAlertMsg} size="sm">
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+               Tu mensaje ha sido enviado correctamente
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
+    
     const [showMsg, setShowMsg] = useState(false);
 
     const handleCloseMsg = () => setShowMsg(false);
     const handleShowMsg = () => setShowMsg(true);
     const ModalMsg = () =>{
+        const [msg, setMsg] = useState({
+            asunto: "",
+            msg: ""
+        })
+        const [privado, setPrivado] = useState(false)
+        const changePrivado = (e) =>{
+            if(e.target.checked){
+                setPrivado(true)
+            } else{
+                setPrivado(false)
+            }
+        }
+        const enviarMsg = async (e) =>{
+            e.preventDefault();
+            let c = {
+                user: user.displayName,
+                user_id: user.uid,
+                asunto: msg.asunto,
+                mensaje: msg.msg,
+                privado: privado,
+            }
+            await enviar(c)
+            .then(()=>{
+                handleCloseMsg()
+                handleShowAlertMsg()
+                document.getElementById("asunto").value = ""
+                document.getElementById("msg").value = ""
+                document.getElementById("privado").checked = false
+                setMsg({
+                    asunto: "",
+                    msg: ""
+                })
+                setPrivado(false)
+                
+            })
+    
+        }
+        const handleChangeMsg = ({ target: { value, name } }) => setMsg({ ...msg, [name]: value });
         return (
             <Modal show={showMsg} onHide={handleCloseMsg} size="md">
         <Modal.Header closeButton>
@@ -184,20 +245,23 @@ const Inicio = () => {
     const HomeInfo = () => {
         return (
             <div className="w-100 h-100">
+                <ModalAlertPublicar />
+                <ModalAlertMsg />
                 <div className="d-flex flex-row justify-content-center">
                     <img className="logo-inicio" src={Logo1} alt=""></img>
                 </div>
                 <ModalPublicar />
                 <ModalMsg />
-                <div className="text-center home-btns d-flex flex-column justify-content-center">
-                    <button onClick={setPageCuentos} className="">Ver Textos</button>
+                <div className="text-start  home-btns d-flex flex-column justify-content-center">
+                    <button onClick={setPageCuentos} className=""><img src={libro1} alt=""></img>Ver Textos</button>
 
                     <button onClick={(e) => { e.preventDefault();let num = Math.floor(Math.random() * cuentos.length)
-                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="">Ver Texto Aleatorio</button>
+                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="">
+                            <img src={ramdom} alt=""></img>Ver Texto Aleatorio</button>
 
 
-                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className="">Publicar Texto</button>
-                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className="">Enviar Mensaje</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className=""><img src={lapiz} alt=""></img>Publicar Texto</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className=""><img src={msg1} alt=""></img>Enviar Mensaje</button>
                     
 
 

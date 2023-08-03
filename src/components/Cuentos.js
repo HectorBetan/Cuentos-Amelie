@@ -1,6 +1,5 @@
 import { useApp } from "../context/AppContext";
 import Logo from "../assets/logo.png"
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import libro1 from "../assets/libro1.png";
 import usuario from "../assets/usuario.png";
@@ -16,10 +15,9 @@ import Logo1 from "../assets/logo-horizontal.png";
 import Modal from "react-bootstrap/Modal";
 import jsPDF from "jspdf";
 const Cuentos = () => {
-    const { admins, user, loading, cuentos, resolveCuento, noCuento, aleatorio, cuento, resolveNoAleatorio, deleteCuento, editarCuento } = useApp()
+    const { admins,  user, loading, cuentos, resolveCuento, noCuento, aleatorio, cuento, resolveNoAleatorio, deleteCuento, editarCuento } = useApp()
     const [newCuentos, setNewCuentos] = useState(cuentos)
     const [cargando, setCargando] = useState(false)
-    const navigate = useNavigate()
     const [page, setPage] = useState("all")
     const [cuentoF, setCuentoF] = useState(false)
     const cerrarCuento = () => {
@@ -70,11 +68,19 @@ const Cuentos = () => {
     };
     const deleteC = async (id) => {
         await deleteCuento(id)
-        handleCloseDelete()
+
+            handleCloseDelete()
+            handleShowAlertDelete()
+            
+        
+        
     }
     const updateC = async (id, cuento) => {
+        
         await editarCuento(id, cuento)
         handleCloseEdit()
+        handleShowAlertEdit()
+        
     }
     const [id, setId] = useState("")
     const [showDelete, setShowDelete] = useState(false)
@@ -161,6 +167,58 @@ const Cuentos = () => {
         }
 
     }
+    const [showAlertDelete, setShowAlertDelete] = useState(false);
+
+    if (showAlertDelete){
+        setTimeout(() => {
+            setShowAlertDelete(false)
+        },3000)
+    }
+    const handleShowAlertDelete = () => {setTimeout(() => {
+        setShowAlertDelete(true)
+        setNewCuentos(cuentos)
+    },1000)}
+    const ModalAlertDelete = () =>{
+        
+        return (
+            <Modal show={showAlertDelete} size="sm">
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+               Se ha eliminado el texto
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
+    const [showAlertEdit, setShowAlertEdit] = useState(false);
+
+    if (showAlertEdit){
+        setTimeout(() => {
+            setShowAlertEdit(false)
+        },3000)
+    }
+    const handleShowAlertEdit = () => {setTimeout(() => {
+        setShowAlertEdit(true)
+        setNewCuentos(cuentos)
+    },1000)}
+    const ModalAlertEdit = () =>{
+        
+        return (
+            <Modal show={showAlertEdit} size="sm">
+        <Modal.Body>
+            <div className="text-center">
+            <div>
+               Se ha editado el texto
+
+            </div>
+        </div>
+        </Modal.Body>
+      </Modal>
+          );
+    }
     const descargarPDF = () => {
         const doc = new jsPDF();
         const titleWidth = doc.getTextDimensions("Título: " + cuento.titulo).w;
@@ -190,7 +248,7 @@ const Cuentos = () => {
         let t = cuento.titulo.toLowerCase().replaceAll(" ", "-")
         doc.save(t + ".pdf");
     };
-    if (loading || !cuentos || !newCuentos || cargando) {
+    if (loading || !cuentos || !newCuentos) {
         return (
             <div className="text-center d-flex flex-column justify-content-center h-100"
                 style={{ alignSelf: "center" }}>
@@ -247,6 +305,8 @@ const Cuentos = () => {
 
                 {page === "all" && !cuentoF && <div>
                     <ModalDelete />
+                    <ModalAlertDelete />
+                    <ModalAlertEdit />
                     <ModalEdit />
                     <label className="m-2">Buscar</label><input onChange={changeBuscar}></input>
                     <div className="text-start">
@@ -272,6 +332,7 @@ const Cuentos = () => {
                                                 {(admins.includes(user.email) || user.uid === cuento.user_id) && <div className="d-flex flex-row justify-content-end">
                                                     <button className="btn btn-primary m-1" onClick={(e) => {
                                                         e.preventDefault();
+                                                        console.log(cuento)
                                                         setId(cuento.id)
                                                         handleShowEdit()
                                                     }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
@@ -335,7 +396,7 @@ const Cuentos = () => {
 
                                 <div className="d-flex flex-row justify-content-end">
                                     <button onClick={descargarPDF} className="btn btn-primary m-1">
-                                        Descargar
+                                    <i class="bi bi-file-earmark-arrow-down"></i>
                                     </button>
                                     {(admins.includes(user.email) || user.uid === cuento.user_id) && <div>
                                         <button className="btn btn-primary m-1" onClick={(e) => {
@@ -380,7 +441,7 @@ const Cuentos = () => {
 
                                 <div className="d-flex flex-row justify-content-end">
                                     <button onClick={descargarPDF} className="btn btn-primary m-1">
-                                        Descargar
+                                    <i class="bi bi-file-earmark-arrow-down"></i>
                                     </button>
                                     {(admins.includes(user.email) || user.uid === cuento.user_id) && <div>
                                         <button className="btn btn-primary m-1" onClick={(e) => {

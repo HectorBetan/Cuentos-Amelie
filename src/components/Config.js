@@ -7,28 +7,35 @@ import MisMensajes from "./MisMensajes"
 import Modal from "react-bootstrap/Modal";
 
 const Config = () => {
-    const { users, user, addBlock, removeBlock, misCuentos, misMensajes, block, cuentos, resolveCuento, admins, noauth, publicar, enviar, resolveAleatorio } = useApp()
+    const { users, user, addBlock, removeBlock, misCuentos, misMensajes, block, admins, publicar, enviar } = useApp()
     const [usuarios, setUsuarios] = useState([])
-    const [newUsers, setNewUsers] = useState("")
     const [deleteU, setDeleteU] = useState("")
     const [ventana, setVentana] = useState(null)
     const [administrar, setAdministrar] = useState(false)
     const [cambiar, setCambiar] = useState(false)
     const [eliminar, setEliminar] = useState(false)
-    const handleChange = (e) => {
-        setNewUsers(e.target.value)
-    }
-    const handleDelete = async (user) => {
-        await removeBlock(user)
-        setUsuarios([])
-    }
-    const registrarUsuarios = (e) => {
-        e.preventDefault()
+    const [alert, setAlert] = useState(null)
+    const handleRemove = async (us) => {
+        console.log(us)
+        await removeBlock(us)
+        .then(() =>{
 
-        addBlock(newUsers)
+                setAlert("Se ha desbloqueado a " + users[deleteU].split(",")[1]);
+                handleCloseBlock()
+        })
+    }
+    if (alert){
+        setTimeout(() => {
+            setAlert(null);
+        }, 3000);
+    }
+    const handleBlock = async (us) => {
+        await addBlock(us)
+        .then(() =>{
 
-        document.getElementById("users").value = ""
-        setUsuarios([])
+            setAlert("Se ha bloqueado a " + users[deleteU].split(",")[1]);
+            handleCloseBlock()
+    })
     }
     useEffect(() => {
         if (users && (!usuarios || usuarios.length === 0)) {
@@ -39,15 +46,17 @@ const Config = () => {
     const [showBlock, setShowBlock] = useState(false)
     const addDelete = (i) => {
         setDeleteU(i)
-        console.log(block.includes(users[i].split(",")[0]))
         handleShowBlock(true)
     }
     const handleShowBlock = () => { setShowBlock(true) }
     const handleCloseBlock = () => { setShowBlock(false) }
     const ModalBlock = () => {
+        console.log(users)
+        console.log(block)
+        console.log(deleteU)
         return (<Modal show={showBlock} onHide={handleCloseBlock}>
             <Modal.Header closeButton>
-                <Modal.Title>Bloquear Usuario</Modal.Title>
+                <Modal.Title>{users && deleteU && block && block.includes(users[deleteU].split(",")[0]) && "Desloquear Usuario"}{users && deleteU && block && !block.includes(users[deleteU].split(",")[0]) && "Bloquear Usuario"}</Modal.Title>
 
             </Modal.Header>
             <Modal.Body>
@@ -58,8 +67,14 @@ const Config = () => {
 
             </Modal.Body>
             <Modal.Footer>
-                <button>Aceptar</button>
-                <button onClick={(e) => { e.preventDefault(); handleCloseBlock() }}>Cancelar</button>
+                <button className={`btn ${block.includes(users[deleteU].split(",")[0]) ? "btn-success":"btn-danger"}`} onClick={(e) => { e.preventDefault();
+                if(block.includes(users[deleteU].split(",")[0])){
+                    handleRemove(users[deleteU].split(",")[0])
+                } else{
+                    handleBlock(users[deleteU].split(",")[0])
+                }
+                }}>Aceptar</button>
+                <button className="btn btn-secondary" onClick={(e) => { e.preventDefault(); handleCloseBlock() }}>Cancelar</button>
             </Modal.Footer>
         </Modal>)
     }
@@ -178,7 +193,7 @@ const Config = () => {
                                 <div>Mensaje</div>
                                 <textarea type="text" id="msg" name="msg" onChange={handleChangeMsg}></textarea>
                                 <div>
-                                    <input id="privado" onChange={changePrivado} type="checkbox"></input>
+                                    <input className="me-1" id="privado" onChange={changePrivado} type="checkbox"></input>
                                     Deseo que mi mensaje sea privado
                                 </div>
                                 <div>
@@ -246,6 +261,11 @@ const Config = () => {
                 {administrar && <div className="d-flex justify-content-center">
 
                     <div className="admin-box">
+                        {alert && <div className={`${alert.includes("desbloqueado") ? "desbloqueado":"bloqueado"}`}>
+                            
+                            {alert.includes("desbloqueado") ?  <i className="bi bi-person-fill-check me-1"></i> :<i className="me-1 bi bi-person-fill-slash"></i>}
+                            
+                            {alert}</div>}
                         {block && usuarios && usuarios.map((usuario, i) => {
                             if (usuario !== "all") {
                                 let use = usuario.split(",")
@@ -259,7 +279,7 @@ const Config = () => {
 
                                             <div>
 
-                                                <ModalBlock />
+                                                {deleteU && <ModalBlock />}
                                                 <button className={`btn ${block.includes(use[0]) ? "btn-success" : "btn-danger"}`} onClick={(e) => {
                                                     e.preventDefault()
                                                     addDelete(i)

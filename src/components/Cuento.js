@@ -89,11 +89,10 @@ const Cuento = () => {
                     <h4>Autor: {cuentoActual.autor}</h4>
                 <h6 className="mb-4">Publicado por {cuentoActual.user}</h6>
                 </div>
-                
-                {cuentoActual.cuento.split(".").map((c,i)=>{
+                {cuentoActual.cuento.split("\n").map((c,i)=>{
                     if(c.length !== 0){
                         return(
-                            <p key={i}>{c+"."}<br /></p>
+                            <p key={i}>{c}<br /></p>
                         )
                     }
                     return false
