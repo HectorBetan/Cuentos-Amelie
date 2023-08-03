@@ -101,6 +101,7 @@ const Cuento = () => {
                 <button onClick={descargarPDF} className="btn btn-primary mt-3">
                     Descargar en PDF
                 </button>
+                
                 </div>
                 
             </div>

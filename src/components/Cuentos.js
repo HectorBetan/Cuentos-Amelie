@@ -296,6 +296,7 @@ const Cuentos = () => {
 
                         </div>
                         <Cuento />
+                        
                     </div>
                 }
                 {cuentoF && !cargando && page === "all" &&
@@ -307,6 +308,12 @@ const Cuentos = () => {
 
                         </div>
                         <Cuento />
+                        <button onClick={(e)=>{
+                    e.preventDefault();
+                    cerrarCuento()
+                }} className="btn btn-primary mt-3">
+                    Volver
+                </button>
                     </div>
                 }
 

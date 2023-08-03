@@ -5,6 +5,7 @@ import Logo1 from "../assets/logo-horizontal.png";
 import MisCuentos from "./MisCuentos"
 import MisMensajes from "./MisMensajes"
 import Modal from "react-bootstrap/Modal";
+
 const Config = () => {
     const { users, user, addBlock, removeBlock, misCuentos, misMensajes, block, cuentos, resolveCuento, admins, noauth, publicar, enviar, resolveAleatorio } = useApp()
     const [usuarios, setUsuarios] = useState([])

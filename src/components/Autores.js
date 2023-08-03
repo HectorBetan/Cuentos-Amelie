@@ -189,6 +189,12 @@ const Autores = () => {
 
                     </div>
                     <Cuento />
+                    <button onClick={(e)=>{
+                    e.preventDefault();
+                    cerrarCuento()
+                }} className="btn btn-primary mt-3">
+                    Volver
+                </button>
                 </div>)
             }
             if (!cuentoF && !cargando) {

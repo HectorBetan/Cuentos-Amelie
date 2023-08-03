@@ -147,6 +147,14 @@
   height: 0px;
   z-index:1000;
 }
+.cerrar-config{
+  height: 0px;
+  z-index:1000;
+}
+.cerrar-config button{
+  margin: 8px;
+  font-size: 20px;
+}
 .caja-cerrar-cuento button{
   margin: 8px;
   font-size: 20px;
