@@ -24,17 +24,17 @@
   margin: 5px 0;
 }
 .publicar-cuento #asunto{
-  width: 350px;
+  width: 100%;
 }
 .publicar-cuento #autor{
-  width: 350px;
+  width: 100%;
 }
 .publicar-cuento #titulo{
-  width: 350px;
+  width: 100%;
 }
 .publicar-cuento textarea{
-  width: 350px;
-  height: 450px;
+  width: 100%;
+  height: 350px;
 }
 .navigation-btns{
   position: fixed;
