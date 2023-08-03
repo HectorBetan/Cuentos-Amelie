@@ -204,7 +204,7 @@ const Mensajes = () => {
                                                 {mensaje.mensaje.length <= 130 &&
                                                     <div></div>
                                                 }
-                                                <div className="d-flex flex-row justify-content-end">
+                                                {(admins.includes(user.email) || user.uid === mensaje.user_id) && <div className="d-flex flex-row justify-content-end">
                                                     <button className="btn btn-primary m-1" onClick={(e) => {
                                                         e.preventDefault();
                                                         setId(mensaje.id)
@@ -220,7 +220,7 @@ const Mensajes = () => {
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
                                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
                                                         </svg></button>
-                                                </div>
+                                                </div>}
                                             </div>
 
 
@@ -266,7 +266,7 @@ const Mensajes = () => {
                                                     {mensaje.mensaje.length <= 130 &&
                                                         <div></div>
                                                     }
-                                                    <div className="d-flex flex-row justify-content-end">
+                                                    {(admins.includes(user.email) || user.uid === mensaje.user_id) && <div className="d-flex flex-row justify-content-end">
                                                         <button className="btn btn-primary m-1" onClick={(e) => {
                                                             e.preventDefault();
                                                             setId(mensaje.id)
@@ -282,7 +282,7 @@ const Mensajes = () => {
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
                                                                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
                                                             </svg></button>
-                                                    </div>
+                                                    </div>}
                                                 </div></div>
                                         </div>
                                     )

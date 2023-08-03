@@ -134,13 +134,21 @@
   color: #4275a8;
 }
 .caja-cuento{
-  border-radius: 25px;
+  border-radius: 25px 25px 0 0;
   width: 350px;
   text-align: justify;
   background-color: #ffffff;
   color: black;
   padding: 10px;
   padding-top: 40px;
+}
+.caja-abajo-cuento{
+  border-radius: 0 0 25px 25px;
+  width: 350px;
+  text-align: justify;
+  background-color: #ffffff;
+  color: black;
+  padding: 10px;
 }
 .caja-cerrar-cuento{
   width: 350px;
@@ -158,6 +166,13 @@
 .caja-cerrar-cuento button{
   margin: 8px;
   font-size: 20px;
+}
+.img-azar{
+  width: 35px;
+  margin: 5px;
+  height: 35px;
+  z-index:1000;
+  align-self: baseline;
 }
 .azar{
   margin: 6px;

@@ -25,29 +25,7 @@ const Inicio = () => {
         e.preventDefault()
         setPage("config")
     }
-    const [cuento, setCuento] = useState({
-        titulo: "",
-        autor: "",
-        cuento: ""
-    })
-    const handleChange = ({ target: { value, name } }) => setCuento({ ...cuento, [name]: value });
-    const publicarCuento = async (e) =>{
-        e.preventDefault();
-        let c = {
-            user: user.displayName,
-            user_id: user.uid,
-            titulo: cuento.titulo,
-            autor: cuento.autor,
-            cuento: cuento.cuento
-        }
-        await publicar(c)
-        .then(()=>{
-            document.getElementById("titulo").value = ""
-            document.getElementById("autor").value = ""
-            document.getElementById("cuento").value = ""
-        })
-
-    }
+    
 
 
     const [showPublicar, setShowPublicar] = useState(false);
@@ -55,6 +33,30 @@ const Inicio = () => {
     const handleClosePublicar = () => setShowPublicar(false);
     const handleShowPublicar = () => setShowPublicar(true);
     const ModalPublicar = () =>{
+        const [cuento, setCuento] = useState({
+            titulo: "",
+            autor: "",
+            cuento: ""
+        })
+        const handleChange = ({ target: { value, name } }) => setCuento({ ...cuento, [name]: value });
+        const publicarCuento = async (e) =>{
+            e.preventDefault();
+            let c = {
+                user: user.displayName,
+                user_id: user.uid,
+                titulo: cuento.titulo,
+                autor: cuento.autor,
+                cuento: cuento.cuento
+            }
+            await publicar(c)
+            .then(()=>{
+                document.getElementById("titulo").value = ""
+                document.getElementById("autor").value = ""
+                document.getElementById("cuento").value = ""
+            })
+    
+        }
+        console.log(user)
         return (
             <Modal show={showPublicar} onHide={handleClosePublicar} size="md">
         <Modal.Header closeButton>
