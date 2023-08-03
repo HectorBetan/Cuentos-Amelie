@@ -58,7 +58,7 @@ const Inicio = () => {
         return (
             <Modal show={showPublicar} onHide={handleClosePublicar} size="md">
         <Modal.Header closeButton>
-          <Modal.Title>Publicar Cuento</Modal.Title>
+          <Modal.Title>Publicar Texto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <div className="text-center">
@@ -73,8 +73,8 @@ const Inicio = () => {
                     <div>
                     <Modal.Footer>
                     
-                    <button onClick={(e)=>{e.preventDefault(); handleClosePublicar()}}  className="btn btn-primary">Cancelar</button>
-                    <button onClick={publicarCuento} className="btn btn-primary">Publicar Cuento</button>
+                    <button onClick={(e)=>{e.preventDefault(); handleClosePublicar()}}  className="btn btn-secondary">Cancelar</button>
+                    <button onClick={publicarCuento} className="btn btn-primary">Publicar Texto</button>
                     </Modal.Footer>
                     </div>
 
@@ -129,7 +129,7 @@ const Inicio = () => {
         return (
             <Modal show={showMsg} onHide={handleCloseMsg} size="md">
         <Modal.Header closeButton>
-          <Modal.Title>Publicar Cuento</Modal.Title>
+          <Modal.Title>Enviar Mensaje</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <div className="text-center">
@@ -147,7 +147,7 @@ const Inicio = () => {
                     
                     <Modal.Footer>
                     
-                    <button onClick={(e)=>{e.preventDefault(); handleCloseMsg()}}  className="btn btn-primary">Cancelar</button>
+                    <button onClick={(e)=>{e.preventDefault(); handleCloseMsg()}}  className="btn btn-secondary">Cancelar</button>
                     <button onClick={enviarMsg} className="btn btn-primary">Enviar Mensaje</button>
                     </Modal.Footer>
                     </div>
@@ -188,14 +188,14 @@ const Inicio = () => {
                 <ModalPublicar />
                 <ModalMsg />
                 <div className="text-center home-btns d-flex flex-column justify-content-center">
-                    <button onClick={setPageCuentos} className="btn btn-primary">Ver Cuentos</button>
+                    <button onClick={setPageCuentos} className="">Ver Textos</button>
 
                     <button onClick={(e) => { e.preventDefault();let num = Math.floor(Math.random() * cuentos.length)
-                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="btn btn-primary">Ver Cuento Aleatorio</button>
+                        resolveCuento(cuentos[num]); sessionStorage.setItem("location", true); resolveAleatorio(); setPage("cuentos"); }} className="">Ver Texto Aleatorio</button>
 
 
-                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className="btn btn-primary">Publicar Cuento</button>
-                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className="btn btn-primary">Enviar Mensaje</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowPublicar() }} className="">Publicar Texto</button>
+                    <button onClick={(e) => { e.preventDefault(); handleShowMsg() }} className="">Enviar Mensaje</button>
                     
 
 
