@@ -27,7 +27,7 @@ const Cuento = () => {
             sessionStorage.removeItem("location")
         }
     }, [cuentos, cuento, resolveCuento, cuentoActual, start])
-    if(cuento){
+    if(cuento && cuentoActual){
         return (
             <div className="d-flex justify-content-center">
                 <div className="caja-cuento">
@@ -36,10 +36,10 @@ const Cuento = () => {
                         <h4>Autor: {cuentoActual.autor}</h4>
                         <h6 className="mb-4">Publicado por {cuentoActual.user}</h6>
                     </div>
-                    {cuentoActual.cuento.split("\n").map((c, i) => {
+                    {cuentoActual.cuento.split("\n\n").map((c, i) => {
                         if (c.length !== 0) {
                             return (
-                                <p key={i}>{c}<br /></p>
+                                <p key={i}>{c}{!c.includes("\n")&&<br />}</p>
                             )
                         }
                         return false

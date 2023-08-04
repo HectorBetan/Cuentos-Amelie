@@ -250,7 +250,6 @@ const Cuentos = () => {
                         <h2 className="text-center">Usuarios</h2>
                     </div>
                     {usuarios.map((usuario, i) => {
-                        console.log(usuario)
                         return (
                             <div className="d-flex justify-content-center" key={i}>
                                 <div className="caja-autor">
@@ -313,7 +312,7 @@ const Cuentos = () => {
                         <ModalAlertDelete />
                         <ModalAlertEdit />
                         <div>
-                            <h2 className="text-center">Cuentos de {usuario}</h2>
+                            <h4 className="text-center">Textos de {usuario}</h4>
                             <button onClick={(e) => { e.preventDefault(); setUsuario("") }} className="btn btn-light">Volver</button>
                             <div className="text-start">
                                 <div className="d-flex flex-column justify-content-center">
