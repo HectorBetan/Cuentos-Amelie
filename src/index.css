@@ -5,8 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(5, 17, 33);
+  background-color: rgb(0, 10, 24);
   color: white;
+  background-image: url("./assets/fondo.png");
 }
 input{
   background-color: #f4f6f7fc;
