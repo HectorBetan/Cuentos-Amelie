@@ -225,6 +225,21 @@
     opacity: 1;
   }
 }
+.alert-no-auth{
+  animation: ronda 1s;
+}
+
+@keyframes ronda {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .users-box{
   width: 300px;
   align-self: center;
@@ -334,4 +349,32 @@
   margin: 5px;
   padding: 5px;
   border: 1px solid #3da251;
+}
+.alertas i{
+  font-size: 50px;
+  color: #3da251;
+}
+.alertas div{
+  font-size: 25px;
+  font-weight: 700;
+  color: #06090c;
+}
+form{
+  margin: 15px !important;
+}
+form div{
+  font-size: 20px;
+  font-weight: 700;
+  
+}
+form span{
+  font-size: 15px;
+  font-weight: 500!important;
+}
+.cambiar-nombre{
+  vertical-align: middle;
+  align-self: center;
+}
+.alerta-name{
+  font-size: 15px!important;
 }

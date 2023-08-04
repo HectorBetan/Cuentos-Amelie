@@ -1,13 +1,11 @@
 import { useApp } from "../context/AppContext";
 import Logo from "../assets/logo.png"
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 const Mensajes = () => {
-    const { loading, mensajes, admins, user, deleteMsg, editarMsg } = useApp()
+    const { loading, mensajes, admins, user, deleteMsg, editarMsg, block } = useApp()
     const [newMensajes, setNewMensajes] = useState(mensajes)
     const [cargando, setCargando] = useState(false)
-    const navigate = useNavigate()
     const [verMensaje, setVerMensaje] = useState("")
     useEffect(() => {
         if (!newMensajes && mensajes) {
@@ -17,7 +15,6 @@ const Mensajes = () => {
     const removeAccents = (str) => {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     };
-
     const changeBuscar = (e) => {
         e.preventDefault();
         setCargando(true);
@@ -31,9 +28,12 @@ const Mensajes = () => {
         setCargando(false);
     };
     const deleteC = async (id) => {
-        await deleteMsg(id)
-        handleCloseDelete()
+        await deleteMsg(id).then((res)=>{
+            handleCloseDelete()
         handleShowAlertDelete()
+        setNewMensajes(res)   
+        })
+        
     }
     const updateC = async (id, mensaje) => {
         await editarMsg(id, mensaje)
@@ -75,16 +75,17 @@ const Mensajes = () => {
             mensaje: "",
             privado: ""
         })
+        const [start, setStart] = useState(true)
         useEffect(() => {
-            if (cuen && !mensaje.mensaje) {
+            if (cuen && start) {
                 setMensaje({
                     asunto: cuen.asunto,
                     mensaje: cuen.mensaje,
                     privado: cuen.privado
                 })
+                setStart(false)
             }
-        }, [cuen, mensaje])
-
+        }, [cuen, start])
         const handleChange = ({ target: { value, name } }) => setMensaje({ ...mensaje, [name]: value });
         const changePrivado = (e) => {
             if (e.target.checked) {
@@ -105,88 +106,90 @@ const Mensajes = () => {
                     <Modal.Header closeButton>
                         <Modal.Title>Editar Mensaje</Modal.Title>
                     </Modal.Header>
+                    <form onSubmit={(e) => {
+                            e.preventDefault();
+                            updateC(id, mensaje)
+                        }}>
                     <Modal.Body>
-                        <div>
-                            <form>
-                                <div>Asunto</div>
+                        <div className="text-center">
+                            
+                                <div className="m-1">Asunto</div>
                                 <input className="form-control" id="asunto" name="asunto" value={mensaje.asunto} onChange={handleChange}></input>
 
-                                <div>Mensaje</div>
-                                <textarea style={{ minHeight: "250px" }} className="form-control" id="mensaje" name="mensaje" value={mensaje.mensaje} onChange={handleChange}></textarea>
-                                <div>
-                                    <input id="privado" onChange={changePrivado} type="checkbox" checked={mensaje.privado}></input>
-                                    Deseo que mi mensaje sea privado
+                                <div className="m-1">Mensaje</div>
+                                <textarea style={{ minHeight: "250px" }} className="form-control" id="mensaje" name="mensaje" value={mensaje.mensaje} onChange={handleChange} required></textarea>
+                                <div className="text-center mt-2">
+                                    <input id="privado" onChange={changePrivado} type="checkbox"></input>
+                                    <span className="ms-1">Deseo que mi mensaje sea privado</span>
                                 </div>
-
-                            </form>
-
+                       
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-secondary" onClick={handleCloseEdit}>
                             Cerrar
                         </button>
-                        <button className="btn btn-primary" onClick={(e) => {
-                            e.preventDefault();
-                            updateC(id, mensaje)
-                        }}>
+                        <button className="btn btn-primary" type="submit">
                             Guardar Cambios
                         </button>
                     </Modal.Footer>
+                    </form>
                 </Modal>
             )
         }
-
     }
     const [showAlertDelete, setShowAlertDelete] = useState(false);
-
-    if (showAlertDelete){
+    if (showAlertDelete) {
         setTimeout(() => {
             setShowAlertDelete(false)
-        },3000)
+        }, 1500)
     }
-    const handleShowAlertDelete = () => {setTimeout(() => {
-        setShowAlertDelete(true)
-    },1000)}
-    const ModalAlertDelete = () =>{
-        
+    const handleShowAlertDelete = () => {
+        setTimeout(() => {
+            setShowAlertDelete(true)
+        }, 1000)
+    }
+    const ModalAlertDelete = () => {
         return (
             <Modal show={showAlertDelete} size="sm">
-        <Modal.Body>
-            <div className="text-center">
-            <div>
-               Se ha eliminado el mensaje
+                <Modal.Body>
+                    <div className="text-center alertas">
+                        <i className="bi bi-envelope-x"></i>
+                        <div className="">
 
-            </div>
-        </div>
-        </Modal.Body>
-      </Modal>
-          );
+
+                            Tu mensaje ha sido eliminado
+
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        );
     }
     const [showAlertEdit, setShowAlertEdit] = useState(false);
-
-    if (showAlertEdit){
+    if (showAlertEdit) {
         setTimeout(() => {
             setShowAlertEdit(false)
-        },3000)
+        }, 1500)
     }
-    const handleShowAlertEdit = () => {setTimeout(() => {
-        setShowAlertEdit(true)
-    },1000)}
-    const ModalAlertEdit = () =>{
-        
+    const handleShowAlertEdit = () => {
+        setTimeout(() => {
+            setShowAlertEdit(true)
+        }, 1000)
+    }
+    const ModalAlertEdit = () => {
         return (
             <Modal show={showAlertEdit} size="sm">
-        <Modal.Body>
-            <div className="text-center">
-            <div>
-               Se ha editado el mensaje
-
-            </div>
-        </div>
-        </Modal.Body>
-      </Modal>
-          );
+                <Modal.Body>
+                    <div className="text-center alertas">
+                        <i className="bi bi-envelope-check"></i>
+                        <div className="">
+                            Tu mensaje ha sido editado
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        );
     }
     if (loading || !mensajes || !newMensajes) {
         return (
@@ -202,7 +205,6 @@ const Mensajes = () => {
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
-
             </div>
         );
     } else {
@@ -213,21 +215,22 @@ const Mensajes = () => {
                 <ModalAlertDelete />
                 <ModalAlertEdit />
                 <div className="d-flex justify-content-center">
-
                     <h2 className="text-center">Mensajes</h2>
                 </div>
                 <label className="m-2">Buscar</label><input onChange={changeBuscar}></input>
                 <div className="text-start">
                     <div className="d-flex flex-column justify-content-center">
-                        {!cargando && newMensajes.map((mensaje, i) => {
-                            console.log(mensaje)
+                        {mensajes && !cargando && newMensajes.map((mensaje, i) => {
+                            
                             if (!mensaje.privado) {
+                                if(block.includes(mensaje.user_email)){
+                                    return false
+                                } else{
                                 return (
                                     <div className="cuento-box" key={i}>
                                         <div className="">
                                             <h5 className="">De: {mensaje.user}</h5>
-                                            <h5 className="">Asunto: {mensaje.asunto}</h5>
-
+                                            {mensaje.asunto && <h5 className="">Asunto: {mensaje.asunto}</h5>}
                                             <h6>Mensaje:</h6>
                                             {mensaje.mensaje.length > 130 && verMensaje !== mensaje.id && <p>{mensaje.mensaje.slice(0, 129) + "..."}</p>}
                                             {(mensaje.mensaje.length <= 130 || verMensaje === mensaje.id) && <p>{mensaje.mensaje}</p>}
@@ -236,8 +239,6 @@ const Mensajes = () => {
                                                     <button className="btn btn-secondary m-1" onClick={(e) => {
                                                         e.preventDefault();
                                                         setVerMensaje(mensaje.id);
-
-
                                                     }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">
                                                             <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
                                                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
@@ -247,13 +248,11 @@ const Mensajes = () => {
                                                     <button className="btn btn-secondary m-1" onClick={(e) => {
                                                         e.preventDefault();
                                                         setVerMensaje("");
-
-
                                                     }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash" viewBox="0 0 16 16">
-                                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
-                                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
-                                                    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
-                                                  </svg> Ocultar Mensaje</button>
+                                                            <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z" />
+                                                            <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z" />
+                                                            <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z" />
+                                                        </svg> Ocultar Mensaje</button>
                                                 }
                                                 {mensaje.mensaje.length <= 130 &&
                                                     <div></div>
@@ -276,12 +275,9 @@ const Mensajes = () => {
                                                         </svg></button>
                                                 </div>}
                                             </div>
-
-
                                         </div>
-
                                     </div>
-                                )
+                                )}
                             } else {
                                 if (admins.includes(user.email)) {
                                     return (
@@ -298,25 +294,21 @@ const Mensajes = () => {
                                                         <button className="btn btn-secondary m-1" onClick={(e) => {
                                                             e.preventDefault();
                                                             setVerMensaje(mensaje.id);
-
-
                                                         }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">
                                                                 <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
                                                                 <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
                                                             </svg> Ver Mensaje</button>
                                                     }
                                                     {mensaje.mensaje.length > 130 && verMensaje === mensaje.id &&
-                                                    <button className="btn btn-secondary m-1" onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setVerMensaje("");
-
-
-                                                    }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash" viewBox="0 0 16 16">
-                                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
-                                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
-                                                    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
-                                                  </svg> Ocultar Mensaje</button>
-                                                }
+                                                        <button className="btn btn-secondary m-1" onClick={(e) => {
+                                                            e.preventDefault();
+                                                            setVerMensaje("");
+                                                        }}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash" viewBox="0 0 16 16">
+                                                                <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z" />
+                                                                <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z" />
+                                                                <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z" />
+                                                            </svg> Ocultar Mensaje</button>
+                                                    }
                                                     {mensaje.mensaje.length <= 130 &&
                                                         <div></div>
                                                     }
@@ -344,12 +336,10 @@ const Mensajes = () => {
                                     return false
                                 }
                             }
-
                         }
                         )}
                     </div>
                 </div>
-
                 {cargando && <div className="d-flex flex-column justify-content-center text-center">
                     <div
                         className="spinner-border m-2"

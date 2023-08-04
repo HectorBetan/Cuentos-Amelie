@@ -17,9 +17,9 @@ import {
     getDoc,
     deleteDoc,
     arrayRemove,
-    arrayUnion,
     collection,
     getDocs,
+
 } from "firebase/firestore";
 const appContext = createContext();
 export const useApp = () => {
@@ -39,12 +39,12 @@ export function AppProvider({ children }) {
     const [mensajes, setMensajes] = useState(null);
     const [misMensajes, setMisMensajes] = useState(null);
     const [noauth, setNoauth] = useState(false);
+    const [remove, setRemove] = useState(false);
     const [aleatorio, setAleatorio] = useState(false);
-    const [cargando1, setCargando1] = useState(false)
-    const resolveAleatorio = () =>{
+    const resolveAleatorio = () => {
         setAleatorio(true)
     }
-    const resolveNoAleatorio = () =>{
+    const resolveNoAleatorio = () => {
         setAleatorio(false)
     }
     const resolveCuento = (cuento) => {
@@ -56,6 +56,63 @@ export function AppProvider({ children }) {
     const updateName = async (displayName) => {
         await updateProfile(auth.currentUser, { displayName }).then(() => {
             setUser({ ...user, displayName: displayName });
+            let mis = []
+            let c = []
+            for (let i = 0; i <misCuentos.length; i++){
+                editarCuentoName(misCuentos[i].id, displayName)
+                let n = misCuentos[i]
+                n.user = displayName
+                mis.push(n)
+            }
+            setMisCuentos(mis)
+            for (let i = 0; i <cuentos.length; i++){
+                if (cuentos[i].user_id === user.uid){
+                    let n = cuentos[i]
+                    n.user = displayName
+                    c.push(n)
+                }
+                
+            }
+            setCuentos(c)
+            let mes = []
+            let d = []
+            for (let i = 0; i <misMensajes.length; i++){
+                editarMsgName(misMensajes[i].id, displayName)
+                let n = misMensajes[i]
+                n.user = displayName
+                mes.push(n)
+            }
+            setMisMensajes(mes)
+            for (let i = 0; i <mensajes.length; i++){
+                if (mensajes[i].user_id === user.uid){
+                    let n = mensajes[i]
+                    n.user = displayName
+                    d.push(n)
+                }
+                
+            }
+            setMensajes(d)
+            let nom = ""
+            const docRef = doc(db, "users", "users");
+                    for (let i = 0; i < users.length; i++) {
+                        let u = users[i].split(",")
+                        if (u[0] === user.email) {
+                            nom = users[i]
+                        }
+                    }      
+                    if (nom) {
+                        updateDoc((docRef), {
+                            users: arrayRemove(nom),
+                        });
+                        let u = []
+                        let l = user.email + "," + displayName
+                        u = users.concat(l)
+                        u = Array.from(new Set(u));
+                        setUsers(u)
+                        updateDoc((docRef), {
+                            users: u,
+                        });
+                    }
             return;
         });
     };
@@ -63,8 +120,10 @@ export function AppProvider({ children }) {
         return await getDownloadURL(ref(storage, photoLocation));
     };
     const login = async () => {
+        
         const googleProvider = new GoogleAuthProvider();
-        return await signInWithPopup(auth, googleProvider);
+        await signInWithPopup(auth, googleProvider)
+        setRemove(false)
     };
     const reAuthenticateGoogle = async () => {
         const googleProvider = new GoogleAuthProvider();
@@ -73,10 +132,28 @@ export function AppProvider({ children }) {
     const logout = async () => {
         return await signOut(auth);
     };
+
     const userDelete = async () => {
         setLoading(true);
+        let nom = ""
+            const docRef = doc(db, "users", "users");
+                    for (let i = 0; i < users.length; i++) {
+                        let u = users[i].split(",")
+                        if (u[0] === user.email) {
+                            nom = users[i]
+                        }
+                    }      
+                    if (nom) {
+                        updateDoc((docRef), {
+                            users: arrayRemove(nom),
+                        });}
+                        await login()
         await deleteUser(auth.currentUser)
             .then(() => {
+                setRemove(true)
+                setUsers(null)
+                setUser(null)
+                
                 setLoading(false);
             })
             .catch((err) => console.log(err));
@@ -86,7 +163,6 @@ export function AppProvider({ children }) {
         await setDoc(docRef, cuento)
         setCuentos(null)
         setMisCuentos(null)
-
     }
     const enviar = async (msg) => {
         const docRef = doc(collection(db, "mensajes"));
@@ -96,36 +172,45 @@ export function AppProvider({ children }) {
     }
     const deleteCuento = async (id) => {
         const docRef = doc(db, "cuentos", id);
-        await deleteDoc(docRef)
-        let c = []
-        cuentos.forEach((cuento) => {
-            if (cuento.id !== id){
-                c.push(cuento)
-            }
+        let a = []
+        await deleteDoc(docRef).then(()=>{
+            let c = []
+            cuentos.forEach((cuento) => {
+                if (cuento.id !== id) {
+                    c.push(cuento)
+                }
+            })
+            setCuentos(c)
+            let d = []
+            c.forEach((cuento) => {
+                if (cuento.user_id === user.uid) {
+                    d.push(cuento)
+                }
+            })
+            setMisCuentos(d)
+            a = c
         })
-        setCuentos(c)
-        let d = []
-        c.forEach((cuento) => {
-            if (cuento.user_id === user.uid){
-                d.push(cuento)
-            }
-        })
-        setMisCuentos(d)
+        return a
+    }
+    const editarCuentoName = async (id, name) => {
+        const docRef = doc(db, "cuentos", id);
+        let c = {user:name}
+        await updateDoc(docRef, c)
     }
     const editarCuento = async (id, cuento) => {
         const docRef = doc(db, "cuentos", id);
         await updateDoc(docRef, cuento)
         let c = cuentos
-        for(let i = 0; i < c.length; i++){
-            if (c[i].id === id){
+        for (let i = 0; i < c.length; i++) {
+            if (c[i].id === id) {
                 c[i].titulo = cuento.titulo
                 c[i].autor = cuento.autor
                 c[i].cuento = cuento.cuento
             }
         }
         let d = misCuentos
-        for(let i = 0; i < d.length; i++){
-            if (d[i].id === id){
+        for (let i = 0; i < d.length; i++) {
+            if (d[i].id === id) {
                 d[i].titulo = cuento.titulo
                 d[i].autor = cuento.autor
                 d[i].cuento = cuento.cuento
@@ -136,37 +221,45 @@ export function AppProvider({ children }) {
     }
     const deleteMsg = async (id) => {
         const docRef = doc(db, "mensajes", id);
-        await deleteDoc(docRef)
-        let c = []
-        mensajes.forEach((msg) => {
-            if (msg.id !== id){
-                c.push(msg)
-            }
+        let a = []
+        await deleteDoc(docRef).then(()=>{
+            let c = []
+            mensajes.forEach((msg) => {
+                if (msg.id !== id) {
+                    c.push(msg)
+                }
+            })
+            setMensajes(c)
+            let d = []
+            c.forEach((msg) => {
+                if (msg.user_id === user.uid) {
+                    d.push(msg)
+                }
+            })
+            setMisMensajes(d)
+            a = c
         })
-        setMensajes(c)
-        let d = []
-        c.forEach((msg) => {
-            if (msg.user_id === user.uid){
-                d.push(msg)
-            }
-        })
-        setMensajes(c)
-        setMisMensajes(d)
+        return a
+    }
+    const editarMsgName = async (id, name) => {
+        const docRef = doc(db, "mensajes", id);
+        let c = {user:name}
+        await updateDoc(docRef, c)
     }
     const editarMsg = async (id, mensaje) => {
         const docRef = doc(db, "mensajes", id);
         await updateDoc(docRef, mensaje)
         let c = mensajes
-        for(let i = 0; i < c.length; i++){
-            if (c[i].id === id){
+        for (let i = 0; i < c.length; i++) {
+            if (c[i].id === id) {
                 c[i].asunto = mensaje.asunto
                 c[i].mensaje = mensaje.mensaje
                 c[i].privado = mensaje.privado
             }
         }
         let d = misMensajes
-        for(let i = 0; i < d.length; i++){
-            if (d[i].id === id){
+        for (let i = 0; i < d.length; i++) {
+            if (d[i].id === id) {
                 d[i].asunto = mensaje.asunto
                 d[i].mensaje = mensaje.mensaje
                 d[i].privado = mensaje.privado
@@ -175,20 +268,19 @@ export function AppProvider({ children }) {
         setMensajes(c)
         setMisMensajes(d)
     }
-    const addBlock = async (usuario) =>{
+    const addBlock = async (usuario) => {
         let u = []
         u = block.concat(usuario)
-        console.log(u)
+     
         const docRef = doc(db, "users", "users");
         await updateDoc((docRef), {
             block: u,
         });
         setBlock(u)
     }
-
-    const removeBlock = async (usuario) =>{
+    const removeBlock = async (usuario) => {
         const docRef = doc(db, "users", "users");
-        console.log(usuario)
+       
         await updateDoc((docRef), {
             block: arrayRemove(usuario),
         });
@@ -200,26 +292,22 @@ export function AppProvider({ children }) {
         const resolveCuentos = () => {
             let c = []
             cuentos.forEach((cuento) => {
-                if (cuento.user_id === user.uid){
+                if (cuento.user_id === user.uid) {
                     c.push(cuento)
                 }
             })
-                setMisCuentos(c)
-            
-            
+            setMisCuentos(c)
         };
         const resolveMensajes = () => {
             let c = []
-            console.log(mensajes)
+            
             mensajes.forEach((mensaje) => {
-                if (mensaje.user_id === user.uid){
+                if (mensaje.user_id === user.uid) {
                     c.push(mensaje)
                 }
             })
-            console.log(c)
-                setMisMensajes(c)
-            
-            
+           
+            setMisMensajes(c)
         };
         if (user && cuentos && !misCuentos) {
             resolveCuentos()
@@ -238,6 +326,7 @@ export function AppProvider({ children }) {
                     id: doc.id,
                     user_id: data.user_id,
                     user: data.user,
+                    user_email: data.user_email,
                     titulo: data.titulo,
                     autor: data.autor,
                     cuento: data.cuento,
@@ -323,8 +412,6 @@ export function AppProvider({ children }) {
         }
     }, [admins, users, block]);
     useEffect(() => {
-        
-
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 if (admins && users && block && (admins.includes(currentUser.email) || !block.includes(currentUser.email))) {
@@ -336,9 +423,9 @@ export function AppProvider({ children }) {
                             a = true
                         }
                     }
-                    if (!a){
+                    if (!a) {
                         let u = []
-                        let l = currentUser.email+","+currentUser.displayName
+                        let l = currentUser.email + "," + currentUser.displayName
                         u = users.concat(l)
                         u = Array.from(new Set(u));
                         setUsers(u)
@@ -349,25 +436,25 @@ export function AppProvider({ children }) {
                     }
                 } else {
                     setUser(null);
-                    setTimeout(()=>{
-                        setNoauth(true)
+                    setTimeout(() => {
+ 
+                            setNoauth(true)
+                        
+                        
                         setLoading(false);
-                    },3000)
-                   
+                    }, 3000)
                 }
                 setLoading(false);
             } else {
                 setUser(null);
                 setLoading(false);
             }
-            
+
         });
         if (admins && users && block) {
             return () => unsubscribe();
         }
     }, [admins, users, block]);
-
-
     return (
         <appContext.Provider
             value={{
@@ -384,7 +471,7 @@ export function AppProvider({ children }) {
                 resolveCuento,
                 noCuento,
                 cuento,
-                admins, 
+                admins,
                 users,
                 misCuentos,
                 enviar,
@@ -401,6 +488,7 @@ export function AppProvider({ children }) {
                 resolveNoAleatorio,
                 block,
                 removeBlock,
+                remove,
             }}
         >
             {children}

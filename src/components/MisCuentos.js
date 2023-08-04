@@ -1,6 +1,5 @@
 import { useApp } from "../context/AppContext";
 import Logo from "../assets/logo.png"
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Cuento from "./Cuento";
@@ -12,28 +11,37 @@ const MisCuentos = () => {
             setMios(misCuentos)
         }
     }, [mios, misCuentos])
-    const navigate = useNavigate()
     const deleteC = async (id) => {
         await deleteCuento(id)
         handleCloseDelete()
         setMios(misCuentos)
+        handleShowAlertDelete()
     }
     const updateC = async (id, cuento) => {
-        await editarCuento(id, cuento)
+        let c = {
+            titulo: cuento.titulo,
+            autor: cuento.autor,
+            cuento: cuento.cuento
+        }
+        if (!c.autor){
+            c.autor = "Sin Autor"
+        }
+        await editarCuento(id, c)
         handleCloseEdit()
         setMios(misCuentos)
+        handleShowAlertEdit()
     }
     const [id, setId] = useState("")
     const [showCuento, setShowCuento] = useState(false)
     const handleCloseCuento = () => setShowCuento(false);
     const handleShowCuento = () => setShowCuento(true);
     const ModalCuento = () => {
-        console.log(mios)
+        
         return (
             <Modal show={showCuento} onHide={handleCloseCuento}>
                 <div className="text-end cerrar-config">
-                                <button className="btn-close" onClick={(e) => { e.preventDefault(); handleCloseCuento() }}></button>
-                            </div>
+                    <button className="btn-close" onClick={(e) => { e.preventDefault(); handleCloseCuento() }}></button>
+                </div>
                 <Modal.Body><Cuento /></Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-secondary" onClick={handleCloseCuento}>
@@ -50,9 +58,9 @@ const MisCuentos = () => {
         return (
             <Modal show={showDelete} onHide={handleCloseDelete}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Eliminar Cuento</Modal.Title>
+                    <Modal.Title>Eliminar Texto</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Realmente deseas eliminar este cuento?</Modal.Body>
+                <Modal.Body>Realmente deseas eliminar este texto?</Modal.Body>
                 <Modal.Footer>
                     <button className="btn btn-secondary" onClick={handleCloseDelete}>
                         Cerrar
@@ -77,55 +85,104 @@ const MisCuentos = () => {
             autor: "",
             cuento: ""
         })
+        const [start, setStart] = useState(true)
         useEffect(() => {
-            if (cuen && !cuento.titulo) {
+            if (cuen && start) {
                 setCuento({
                     titulo: cuen.titulo,
                     autor: cuen.autor,
                     cuento: cuen.cuento
                 })
+                setStart(false)
             }
-        }, [cuen, cuento])
-
+        }, [cuen, start])
         const handleChange = ({ target: { value, name } }) => setCuento({ ...cuento, [name]: value });
-
         if (cuen) {
             return (
                 <Modal show={showEdit} onHide={handleCloseEdit}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Editar Cuento</Modal.Title>
+                        <Modal.Title>Editar Texto</Modal.Title>
                     </Modal.Header>
+                    <form onSubmit={(e) => {
+                            e.preventDefault();
+                            updateC(id, cuento)
+                        }}>
                     <Modal.Body>
-                        <div>
-                            <form>
-                                <div>Titulo</div>
-                                <input className="form-control" id="titulo" name="titulo" value={cuento.titulo} onChange={handleChange}></input>
-                                <div>Autor</div>
+                        <div className="text-center">
+                            
+                                <div className="m-1">Titulo</div>
+                                <input className="form-control" id="titulo" name="titulo" value={cuento.titulo} onChange={handleChange} required></input>
+                                <div className="m-1">Autor</div>
                                 <input className="form-control" id="autor" name="autor" value={cuento.autor} onChange={handleChange}></input>
-                                <div>Cuento</div>
-                                <textarea style={{ minHeight: "250px" }} className="form-control" id="cuento" name="cuento" value={cuento.cuento} onChange={handleChange}></textarea>
+                                <div className="m-1">Texto</div>
+                                <textarea style={{ minHeight: "250px" }} className="form-control" id="cuento" name="cuento" value={cuento.cuento} onChange={handleChange} required></textarea>
                                 <div>
                                 </div>
-
-                            </form>
-
+                  
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-secondary" onClick={handleCloseEdit}>
                             Cerrar
                         </button>
-                        <button className="btn btn-primary" onClick={(e) => {
-                            e.preventDefault();
-                            updateC(id, cuento)
-                        }}>
+                        <button className="btn btn-primary" type="submit">
                             Guardar Cambios
                         </button>
                     </Modal.Footer>
+                    </form>
                 </Modal>
             )
         }
-
+    }
+    const [showAlertDelete, setShowAlertDelete] = useState(false);
+    if (showAlertDelete) {
+        setTimeout(() => {
+            setShowAlertDelete(false)
+        }, 1500)
+    }
+    const handleShowAlertDelete = () => {
+        setTimeout(() => {
+            setShowAlertDelete(true)
+        }, 1000)
+    }
+    const ModalAlertDelete = () => {
+        return (
+            <Modal show={showAlertDelete} size="sm">
+                <Modal.Body>
+                    <div className="text-center alertas">
+                        <i className="bi bi-journal-x"></i>
+                        <div className="">
+                            Tu texto ha sido eliminado
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        );
+    }
+    const [showAlertEdit, setShowAlertEdit] = useState(false);
+    if (showAlertEdit) {
+        setTimeout(() => {
+            setShowAlertEdit(false)
+        }, 1500)
+    }
+    const handleShowAlertEdit = () => {
+        setTimeout(() => {
+            setShowAlertEdit(true)
+        }, 1000)
+    }
+    const ModalAlertEdit = () => {
+        return (
+            <Modal show={showAlertEdit} size="sm">
+                <Modal.Body>
+                    <div className="text-center alertas">
+                        <i className="bi bi-journal-check"></i>
+                        <div className="">
+                            Tu texto ha sido editado
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        );
     }
     if (loading || !misCuentos || !mios) {
         return (
@@ -141,7 +198,6 @@ const MisCuentos = () => {
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
-
             </div>
         );
     } else {
@@ -150,13 +206,14 @@ const MisCuentos = () => {
                 <ModalDelete />
                 <ModalEdit />
                 <ModalCuento />
+                <ModalAlertDelete />
+                <ModalAlertEdit />
                 {mios.map((cuento, i) => {
                     return (
                         <div className="mios-box" key={i}>
                             <div className="">
                                 <h5 className="">Titulo: {cuento.titulo}</h5>
                                 <h5 className="">Autor: {cuento.autor}</h5>
-
                                 <button className="btn btn-secondary m-1" onClick={(e) => {
                                     e.preventDefault();
                                     resolveCuento(cuento);
